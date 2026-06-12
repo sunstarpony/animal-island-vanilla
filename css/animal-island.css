@@ -2142,6 +2142,132 @@
   mask-image: radial-gradient(circle at center, transparent var(--ai-mask-r), black calc(var(--ai-mask-r) + 1px));
 }
 
+/* Loading animations (replaces GSAP) */
+@keyframes ai-loading-island {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-15px) rotate(1deg); }
+}
+@keyframes ai-loading-tree {
+  0%, 100% { transform: rotate(-6deg); }
+  50% { transform: rotate(5deg); }
+}
+@keyframes ai-loading-leaf1 {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+@keyframes ai-loading-leaf2 {
+  0%, 100% { transform: rotate(3deg) translate(0, 0); }
+  50% { transform: rotate(-4deg) translate(-3px, -3px); }
+}
+@keyframes ai-loading-leaf3 {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-6deg); }
+}
+@keyframes ai-loading-leaf4 {
+  0%, 100% { transform: rotate(0deg) translateY(0); }
+  50% { transform: rotate(-6deg) translateY(-3px); }
+}
+@keyframes ai-loading-leaf5 {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+@keyframes ai-loading-water1 {
+  0%, 100% { transform: scaleX(1); }
+  50% { transform: scaleX(1.2); }
+}
+@keyframes ai-loading-water2 {
+  0%, 100% { transform: scaleX(1); }
+  50% { transform: scaleX(0.8); }
+}
+@keyframes ai-loading-triwave-x1 {
+  from { transform: translateX(-60px); }
+  to { transform: translateX(20px); }
+}
+@keyframes ai-loading-triwave-x2 {
+  from { transform: translateX(-10px); }
+  to { transform: translateX(50px); }
+}
+@keyframes ai-loading-triwave-scale {
+  0%, 100% { transform: scaleY(0); }
+  50% { transform: scaleY(1); }
+}
+@keyframes ai-loading-sinewave-x {
+  from { translate: 0 0; }
+  to { translate: 75px 0; }
+}
+@keyframes ai-loading-sinewave-scale {
+  0%, 100% { scale: 1 0.8; }
+  50% { scale: 1 1.2; }
+}
+
+.ai-loading--animated #whole-island {
+  transform-box: fill-box;
+  transform-origin: bottom center;
+  animation: ai-loading-island 1s ease-in-out infinite;
+}
+.ai-loading--animated #tree {
+  transform-box: fill-box;
+  transform-origin: bottom center;
+  animation: ai-loading-tree 2s ease-in-out infinite;
+}
+.ai-loading--animated #leaf1 {
+  transform-box: fill-box;
+  transform-origin: center right;
+  animation: ai-loading-leaf1 1s ease-in-out infinite;
+}
+.ai-loading--animated #leaf2 {
+  transform-box: fill-box;
+  transform-origin: bottom right;
+  animation: ai-loading-leaf2 1s ease-in-out infinite;
+}
+.ai-loading--animated #leaf3 {
+  transform-box: fill-box;
+  transform-origin: bottom center;
+  animation: ai-loading-leaf3 1s ease-in-out infinite;
+}
+.ai-loading--animated #leaf4 {
+  transform-box: fill-box;
+  transform-origin: bottom left;
+  animation: ai-loading-leaf4 1s ease-in-out infinite;
+}
+.ai-loading--animated #leaf5 {
+  transform-box: fill-box;
+  transform-origin: top left;
+  animation: ai-loading-leaf5 1s ease-in-out infinite;
+}
+.ai-loading--animated #water-circle1 {
+  transform-box: fill-box;
+  transform-origin: center center;
+  animation: ai-loading-water1 1s ease-in-out infinite;
+}
+.ai-loading--animated #water-circle2 {
+  transform-box: fill-box;
+  transform-origin: center center;
+  animation: ai-loading-water2 1s ease-in-out infinite;
+  animation-delay: -0.5s;
+}
+.ai-loading--animated #tri-wave1 {
+  animation: ai-loading-triwave-x1 6s linear infinite;
+}
+.ai-loading--animated #tri-wave2 {
+  animation: ai-loading-triwave-x2 6s linear infinite;
+}
+.ai-loading--animated #tri-wave1 > path,
+.ai-loading--animated #tri-wave2 > path {
+  transform-box: fill-box;
+  transform-origin: bottom center;
+  transform: scaleY(0);
+  animation: ai-loading-triwave-scale 1s ease-in-out infinite;
+}
+.ai-loading--animated #sine-wave-group > * {
+  scale: 1 0.8;
+  animation:
+    ai-loading-sinewave-x 2s linear infinite,
+    ai-loading-sinewave-scale 1s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: bottom center;
+}
+
 /* ============================================
    Utility Classes
    ============================================ */

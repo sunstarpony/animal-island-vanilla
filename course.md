@@ -39,25 +39,21 @@
 
 ### 第一步：下载文件
 
-将 `vanilla` 文件夹下载到你的项目中，保持目录结构不变：
+将以下文件和文件夹下载到你的项目中，保持目录结构不变：
 
 ```
 your-project/
 ├── index.html
-└── vanilla/
-    ├── css/
-    │   └── animal-island.css
-    ├── js/
-    │   ├── animal-island.js
-    │   └── vendor/
-    │       ├── gsap.min.js
-    │       └── MotionPathPlugin.min.js
-    └── assets/
-        └── img/
-            ├── cursor/
-            ├── dividers/
-            ├── footer/
-            └── icons/
+├── css/
+│   └── animal-island.css
+├── js/
+│   └── animal-island.js
+└── assets/
+    └── img/
+        ├── cursor/
+        ├── dividers/
+        ├── footer/
+        └── icons/
 ```
 
 ### 第二步：引入文件
@@ -78,18 +74,14 @@ your-project/
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&display=swap" rel="stylesheet">
 
   <!-- 核心样式 -->
-  <link rel="stylesheet" href="vanilla/css/animal-island.css">
+  <link rel="stylesheet" href="css/animal-island.css">
 </head>
 <body>
 
   <!-- 你的内容写在这里 -->
 
-  <!-- GSAP（仅 Loading 组件需要，建议放在 animal-island.js 之前） -->
-  <script src="vanilla/js/vendor/gsap.min.js"></script>
-  <script src="vanilla/js/vendor/MotionPathPlugin.min.js"></script>
-
   <!-- 核心脚本（放在 body 末尾） -->
-  <script src="vanilla/js/animal-island.js"></script>
+  <script src="js/animal-island.js"></script>
 </body>
 </html>
 ```
@@ -110,11 +102,9 @@ your-project/
 |------|------|----------|
 | `css/animal-island.css` | 核心样式文件，包含所有组件和设计令牌 | **必须** |
 | `js/animal-island.js` | 核心脚本，包含所有交互逻辑和自动初始化 | **必须** |
-| `js/vendor/gsap.min.js` | GSAP 动画库，Loading 组件需要 | 仅 Loading 需要 |
-| `js/vendor/MotionPathPlugin.min.js` | GSAP 路径插件，Loading 鱼动画需要 | 仅 Loading 需要 |
 | `assets/` | 图片资源（图标、光标、分割线、页脚等） | 使用对应组件时需要 |
 
-> **提示**：如果你不用 Loading 组件，可以不引入 GSAP 相关文件。Loading 组件会自动按需加载它们，但建议预先引入以避免延迟。
+> **提示**：所有组件均为零外部依赖，无需额外加载任何第三方库。
 
 ---
 
@@ -157,7 +147,10 @@ your-project/
   --ai-bg-disabled: #f0ece2;
 
   /* 字体 */
-  --ai-font-family: Nunito, 'Noto Sans SC', 'Zen Maru Gothic', sans-serif;
+  --ai-font-family: Nunito, 'Noto Sans SC', 'Zen Maru Gothic',
+    'HarmonyOS Sans SC', 'MiSans',
+    -apple-system, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
+    sans-serif;
   --ai-font-size-sm: 12px;
   --ai-font-size-base: 14px;
   --ai-font-size-lg: 16px;
@@ -198,27 +191,27 @@ your-project/
 
 ## 4. 组件一览
 
-| 组件 | 纯 CSS | 需要 JS | 自动初始化 | 需要 GSAP |
-|------|--------|---------|------------|-----------|
-| Button | ✓ | | | |
-| Card | ✓ | | | |
-| Checkbox | | ✓ | `data-ai="checkbox"` | |
-| CodeBlock | | ✓ | `.ai-code-block` | |
-| Collapse | | ✓ | `.ai-collapse` | |
-| Cursor | ✓ | | | |
-| Divider | ✓ | | | |
-| Footer | ✓ | | | |
-| Icon | ✓ | | | |
-| Input | | ✓ | `.ai-input-wrapper .ai-input` | |
-| Loading | | ✓ | `data-ai="loading"` | ✓ |
-| Modal | | ✓ | 手动调用 | |
-| Phone | | ✓ | `data-ai="phone"` | |
-| Select | | ✓ | `data-ai="select"` | |
-| Switch | | ✓ | `.ai-switch` | |
-| Table | | ✓ | `data-ai="table"` | |
-| Tabs | | ✓ | `data-ai="tabs"` | |
-| Time | | ✓ | `data-ai="time"` | |
-| Typewriter | | ✓ | 手动调用 | |
+| 组件 | 纯 CSS | 需要 JS | 自动初始化 |
+|------|--------|---------|------------|
+| Button | ✓ | | |
+| Card | ✓ | | |
+| Checkbox | | ✓ | `data-ai="checkbox"` |
+| CodeBlock | | ✓ | `.ai-code-block` |
+| Collapse | | ✓ | `.ai-collapse` |
+| Cursor | ✓ | | |
+| Divider | ✓ | | |
+| Footer | ✓ | | |
+| Icon | ✓ | | |
+| Input | | ✓ | `.ai-input-wrapper .ai-input` |
+| Loading | | ✓ | `data-ai="loading"` |
+| Modal | | ✓ | 手动调用 |
+| Phone | | ✓ | `data-ai="phone"` |
+| Select | | ✓ | `data-ai="select"` |
+| Switch | | ✓ | `.ai-switch` |
+| Table | | ✓ | `data-ai="table"` |
+| Tabs | | ✓ | `data-ai="tabs"` |
+| Time | | ✓ | `data-ai="time"` |
+| Typewriter | | ✓ | 手动调用 |
 
 ---
 
@@ -484,7 +477,7 @@ document.getElementById('my-code-container').innerHTML =
     <span class="ai-collapse__icon">−</span>
     <span class="ai-collapse__question">如何捕捉稀有鱼类？</span>
     <span class="ai-collapse__leaf">
-      <img src="vanilla/assets/img/icons/icon-leaf.png" alt="">
+      <img src="assets/img/icons/icon-leaf.png" alt="">
     </span>
   </button>
   <div class="ai-collapse__answer-wrapper">
@@ -503,7 +496,7 @@ document.getElementById('my-code-container').innerHTML =
     <span class="ai-collapse__icon">+</span>
     <span class="ai-collapse__question">如何获取更多里数？</span>
     <span class="ai-collapse__leaf">
-      <img src="vanilla/assets/img/icons/icon-leaf.png" alt="">
+      <img src="assets/img/icons/icon-leaf.png" alt="">
     </span>
   </button>
   <div class="ai-collapse__answer-wrapper">
@@ -726,6 +719,9 @@ scoped 模式自动保留的光标语义：
 
 ```javascript
 var input = new AnimalIsland.Input(document.querySelector('.ai-input'), {
+  prefix: '🍎',           // 前缀内容（HTML 字符串）
+  suffix: '.com',          // 后缀内容（HTML 字符串）
+  allowClear: true,        // 是否显示清除按钮
   onClear: function () {
     console.log('内容已清除');
   }
@@ -736,7 +732,7 @@ var input = new AnimalIsland.Input(document.querySelector('.ai-input'), {
 
 ### 5.11 Loading 加载动画
 
-需要 JS + GSAP 初始化，支持自动初始化。
+需要 JS 初始化，支持自动初始化。使用原生 `requestAnimationFrame` 实现，无需任何外部依赖。
 
 #### 基本用法（自动初始化）
 
@@ -761,15 +757,6 @@ var input = new AnimalIsland.Input(document.querySelector('.ai-input'), {
   loading.setActive(true);
 </script>
 ```
-
-> **注意**：Loading 组件需要 GSAP 动画库。你可以在 HTML 中预先引入，也可以让组件自动按需加载：
->
-> ```html
-> <!-- 预先引入（推荐，避免延迟） -->
-> <script src="vanilla/js/vendor/gsap.min.js"></script>
-> <script src="vanilla/js/vendor/MotionPathPlugin.min.js"></script>
-> <script src="vanilla/js/animal-island.js"></script>
-> ```
 
 #### 关闭动画
 
@@ -1453,7 +1440,7 @@ AnimalIsland.autoInit()                 // 手动触发自动初始化
 CSS 文件包含所有组件样式，不支持按需加载。但 JS 组件是独立的，你只初始化需要的组件即可。如果你非常在意文件大小，可以手动从 CSS 文件中删除不需要的组件样式。
 
 ### Q: Loading 动画不显示？
-确保 `js/vendor/gsap.min.js` 和 `js/vendor/MotionPathPlugin.min.js` 文件存在。Loading 组件会自动按需加载它们，但如果路径不对会导致加载失败。你也可以在 HTML 中预先引入这两个脚本。
+Loading 组件使用 `requestAnimationFrame` 实现，无需外部依赖。请确保 `assets/img/` 目录完整，且 CSS 中引用的图片路径正确。
 
 ### Q: 图片资源加载失败？
 确保 `assets/` 目录与 `css/` 目录的相对路径正确。CSS 中引用图片使用的是相对路径 `../assets/img/...`，如果你的目录结构不同，需要修改 CSS 中的路径。

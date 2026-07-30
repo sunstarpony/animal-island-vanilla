@@ -1361,6 +1361,1458 @@
   }
 
   /* ============================================
+     Tag — 标签（closable / clickable）
+     ============================================ */
+  AI.Tag = function (el, options) {
+    this.el = typeof el === 'string' ? document.querySelector(el) : el;
+    if (!this.el) return;
+
+    this.options = options || {};
+    this.onClose = this.options.onClose ||
+      (this.el.getAttribute('data-on-close') ? new Function(this.el.getAttribute('data-on-close')) : null);
+    this.onClick = this.options.onClick ||
+      (this.el.getAttribute('data-on-click') ? new Function(this.el.getAttribute('data-on-click')) : null);
+
+    var closeBtn = this.el.querySelector('.ai-tag__close');
+    if (closeBtn) {
+      this._closeBtn = closeBtn;
+      closeBtn.addEventListener('click', this._handleClose.bind(this));
+    }
+    if (this.el.classList.contains('ai-tag--clickable')) {
+      this.el.addEventListener('click', this._handleClick.bind(this));
+      this.el.addEventListener('keydown', this._handleKeydown.bind(this));
+    }
+  };
+
+  AI.Tag.prototype._handleClose = function (e) {
+    e.stopPropagation();
+    if (this.el.classList.contains('ai-tag--disabled')) return;
+    if (this.onClose) this.onClose(e);
+    // Default: remove from DOM after close
+    if (!e.defaultPrevented) {
+      this.el.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+      this.el.style.opacity = '0';
+      this.el.style.transform = 'scale(0.8)';
+      var self = this;
+      setTimeout(function () {
+        if (self.el.parentNode) self.el.parentNode.removeChild(self.el);
+      }, 200);
+    }
+  };
+
+  AI.Tag.prototype._handleClick = function (e) {
+    if (this.el.classList.contains('ai-tag--disabled')) return;
+    if (this.onClick) this.onClick(e);
+  };
+
+  AI.Tag.prototype._handleKeydown = function (e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      this._handleClick(e);
+    }
+  };
+
+  AI.Tag.prototype.close = function () {
+    if (this._closeBtn) this._closeBtn.click();
+  };
+
+  AI.Tag.prototype.disable = function () { this.el.classList.add('ai-tag--disabled'); };
+  AI.Tag.prototype.enable = function () { this.el.classList.remove('ai-tag--disabled'); };
+
+  /* ============================================
+     Title — 标题（缎带）— 仅工厂方法
+     ============================================ */
+  AI.Title = function (options) {
+    var opts = options || {};
+    var size = opts.size || 'middle'; // small | middle | large
+    var color = opts.color || 'default';
+    var text = opts.text != null ? String(opts.text) : '';
+
+    var sizeClass = size === 'small' ? 'ai-title--sm'
+      : size === 'large' ? 'ai-title--lg'
+      : 'ai-title--md';
+    var colorClass = color !== 'default' ? 'ai-title--' + color : '';
+
+    var root = document.createElement('span');
+    root.className = 'ai-title ' + sizeClass + ' ' + colorClass;
+
+    var ribbon = document.createElement('span');
+    ribbon.className = 'ai-title__ribbon';
+
+    var backLeft = document.createElement('span');
+    backLeft.className = 'ai-title__back ai-title__back--left';
+    backLeft.setAttribute('aria-hidden', 'true');
+    var backRight = document.createElement('span');
+    backRight.className = 'ai-title__back ai-title__back--right';
+    backRight.setAttribute('aria-hidden', 'true');
+    var foldLeft = document.createElement('span');
+    foldLeft.className = 'ai-title__fold ai-title__fold--left';
+    foldLeft.setAttribute('aria-hidden', 'true');
+    var foldRight = document.createElement('span');
+    foldRight.className = 'ai-title__fold ai-title__fold--right';
+    foldRight.setAttribute('aria-hidden', 'true');
+    var front = document.createElement('span');
+    front.className = 'ai-title__front';
+    front.setAttribute('aria-hidden', 'true');
+    var textEl = document.createElement('span');
+    textEl.className = 'ai-title__text';
+    textEl.innerHTML = text;
+
+    ribbon.appendChild(backLeft);
+    ribbon.appendChild(backRight);
+    ribbon.appendChild(foldLeft);
+    ribbon.appendChild(foldRight);
+    ribbon.appendChild(front);
+    ribbon.appendChild(textEl);
+    root.appendChild(ribbon);
+
+    this.el = root;
+    return root;
+  };
+
+  AI.Title.prototype.setText = function (text) {
+    var textEl = this.el.querySelector('.ai-title__text');
+    if (textEl) textEl.innerHTML = text;
+  };
+
+  /* ============================================
+     Skeleton — 骨架屏（工厂方法 + 切换 loading）
+     ============================================ */
+  AI.Skeleton = function (el, options) {
+    this.el = typeof el === 'string' ? document.querySelector(el) : el;
+    if (!this.el) return;
+
+    this.options = options || {};
+    this.variant = this.options.variant || 'text';
+    this.active = this.options.active !== false;
+    this.rows = this.options.rows || 3;
+    this.width = this.options.width;
+    this.heightValue = this.options.heightValue;
+    this.widthValue = this.options.widthValue;
+    this.rowWidths = this.options.rowWidths;
+    this._savedChildren = [];
+
+    this._render();
+  };
+
+  AI.Skeleton.prototype._render = function () {
+    var baseCls = 'ai-skeleton';
+    if (this.active) baseCls += ' ai-skeleton--active';
+    var variantCls = 'ai-skeleton--' + this.variant;
+
+    if (this.variant === 'paragraph') {
+      this.el.className = baseCls + ' ai-skeleton--paragraph';
+      var widths = Array.isArray(this.rowWidths) && this.rowWidths.length
+        ? this.rowWidths
+        : ['100%', '92%', '84%', '76%', '68%'];
+      var html = '';
+      var rowCount = Math.max(1, this.rows);
+      for (var i = 0; i < rowCount; i++) {
+        var w = widths[i] != null ? widths[i] : widths[widths.length - 1];
+        html += '<div class="ai-skeleton__line" style="width:' + w + '"></div>';
+      }
+      this.el.innerHTML = html;
+      return;
+    }
+
+    if (this.variant === 'circle') {
+      var size = this.widthValue || this.heightValue || 44;
+      this.el.className = baseCls + ' ' + variantCls;
+      this.el.style.width = typeof size === 'number' ? size + 'px' : size;
+      this.el.style.height = typeof size === 'number' ? size + 'px' : size;
+      this.el.setAttribute('aria-hidden', 'true');
+      return;
+    }
+
+    if (this.variant === 'rect') {
+      var rw = this.widthValue || '100%';
+      var rh = this.heightValue || 120;
+      this.el.className = baseCls + ' ' + variantCls;
+      this.el.style.width = typeof rw === 'number' ? rw + 'px' : rw;
+      this.el.style.height = typeof rh === 'number' ? rh + 'px' : rh;
+      this.el.setAttribute('aria-hidden', 'true');
+      return;
+    }
+
+    // text
+    var tw = this.width || '100%';
+    var th = this.heightValue || 16;
+    this.el.className = baseCls + ' ' + variantCls;
+    this.el.style.width = typeof tw === 'number' ? tw + 'px' : tw;
+    this.el.style.height = typeof th === 'number' ? th + 'px' : th;
+    this.el.setAttribute('aria-hidden', 'true');
+  };
+
+  AI.Skeleton.prototype.setActive = function (active) {
+    this.active = !!active;
+    this._render();
+  };
+
+  /* ============================================
+     Progress — 进度条（动态更新百分比）
+     ============================================ */
+  AI.Progress = function (el, options) {
+    this.el = typeof el === 'string' ? document.querySelector(el) : el;
+    if (!this.el) return;
+
+    this.options = options || {};
+    this.percent = this._parsePercent(this.options.percent != null ? this.options.percent : parseFloat(this.el.getAttribute('data-percent') || '0'));
+    this.size = this.options.size || this.el.getAttribute('data-size') || 'middle';
+    this.showInfo = this.options.showInfo !== false;
+    this.infoPosition = this.options.infoPosition || this.el.getAttribute('data-info-position') || 'inside';
+    this.duration = this.options.duration != null ? this.options.duration : 0.6;
+    this.infoFormat = this.options.infoFormat;
+
+    this._render();
+  };
+
+  AI.Progress.prototype._parsePercent = function (v) {
+    if (typeof v !== 'number' || isNaN(v)) return 0;
+    return Math.max(0, Math.min(100, v));
+  };
+
+  AI.Progress.prototype._render = function () {
+    var p = this.percent;
+    var info = this.infoFormat ? this.infoFormat(p) : Math.round(p) + '%';
+    var sizeClass = this.size === 'small' ? 'ai-progress__track--sm'
+      : this.size === 'large' ? 'ai-progress__track--lg'
+      : 'ai-progress__track--md';
+    var fillTransition = this.duration === 0 ? 'ai-progress__fill--notransition' : '';
+    var INSIDE_MIN_FILL = 18;
+    var isInside = this.showInfo && this.infoPosition === 'inside';
+    var infoInsideVisible = isInside && p >= INSIDE_MIN_FILL;
+    var bodyCls = this.infoPosition === 'top' ? 'ai-progress__body' : 'ai-progress__body ai-progress__body--nogap';
+
+    var html = '';
+    if (this.infoPosition === 'top') {
+      html += '<div class="' + bodyCls + '">';
+      if (this.showInfo) {
+        html += '<div class="ai-progress__info ai-progress__info--top">' + info + '</div>';
+      }
+      html += this._renderTrack(sizeClass, fillTransition, p, info, isInside, infoInsideVisible);
+      html += '</div>';
+    } else {
+      html += '<div class="ai-progress__row">';
+      html += this._renderTrack(sizeClass, fillTransition, p, info, isInside, infoInsideVisible);
+      if (this.showInfo && this.infoPosition === 'right') {
+        html += '<div class="ai-progress__info ai-progress__info--right">' + info + '</div>';
+      }
+      html += '</div>';
+    }
+
+    this.el.className = 'ai-progress';
+    this.el.setAttribute('role', 'progressbar');
+    this.el.setAttribute('aria-valuemin', '0');
+    this.el.setAttribute('aria-valuemax', '100');
+    this.el.setAttribute('aria-valuenow', String(Math.round(p)));
+    this.el.innerHTML = html;
+  };
+
+  AI.Progress.prototype._renderTrack = function (sizeClass, fillTransition, p, info, isInside, infoInsideVisible) {
+    var html = '<div class="ai-progress__track ' + sizeClass + '">';
+    html += '<div class="ai-progress__fill ' + fillTransition + '" style="width:' + p + '%;transition-duration:' + this.duration + 's">';
+    if (infoInsideVisible) {
+      html += '<span class="ai-progress__info-inside">' + info + '</span>';
+    }
+    html += '</div>';
+    if (isInside && !infoInsideVisible) {
+      html += '<span class="ai-progress__info-inside" style="color:#725d42">' + info + '</span>';
+    }
+    html += '</div>';
+    return html;
+  };
+
+  AI.Progress.prototype.setPercent = function (percent) {
+    this.percent = this._parsePercent(percent);
+    this._render();
+  };
+
+  AI.Progress.prototype.getPercent = function () { return this.percent; };
+
+  /* ============================================
+     Wallet — 钱包（数值格式化 + 更新）
+     ============================================ */
+  AI.Wallet = function (el, options) {
+    this.el = typeof el === 'string' ? document.querySelector(el) : el;
+    if (!this.el) return;
+
+    this.options = options || {};
+    this.size = this.options.size || this.el.getAttribute('data-size') || 'medium';
+    this.value = this.options.value != null ? this.options.value : this.el.getAttribute('data-value');
+    this.thousandSeparator = this.options.thousandSeparator != null ? this.options.thousandSeparator : ',';
+    this.iconHTML = this.options.iconHTML || null;
+
+    this._render();
+  };
+
+  AI.Wallet._formatValue = function (value, sep) {
+    if (value === undefined || value === null) return '00,000';
+    if (typeof value !== 'number') return String(value);
+    if (!sep) return String(value);
+    var sign = value < 0 ? '-' : '';
+    var parts = Math.abs(value).toString().split('.');
+    var intPart = parts[0];
+    var frac = parts[1];
+    var intWithSep = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, sep);
+    return frac ? sign + intWithSep + '.' + frac : sign + intWithSep;
+  };
+
+  AI.Wallet.prototype._render = function () {
+    var sizeClass = this.size === 'small' ? 'ai-wallet--sm'
+      : this.size === 'large' ? 'ai-wallet--lg'
+      : '';
+    this.el.className = 'ai-wallet ' + sizeClass;
+
+    var bagHTML = this.iconHTML != null
+      ? this.iconHTML
+      : '<img src="assets/img/icons/items/item-022.png" alt="" style="width:80%;height:80%;object-fit:contain" onerror="this.style.display=\'none\'">';
+
+    var formatted = AI.Wallet._formatValue(this.value, this.thousandSeparator);
+    this.el.innerHTML =
+      '<div class="ai-wallet__bag">' + bagHTML + '</div>' +
+      '<div class="ai-wallet__pill"><span class="ai-wallet__value">' + formatted + '</span></div>';
+  };
+
+  AI.Wallet.prototype.setValue = function (value) {
+    this.value = value;
+    var valEl = this.el.querySelector('.ai-wallet__value');
+    if (valEl) {
+      valEl.textContent = AI.Wallet._formatValue(value, this.thousandSeparator);
+    }
+  };
+
+  AI.Wallet.prototype.getValue = function () { return this.value; };
+
+  /* ============================================
+     Radio — 单选组（roving tabindex + 键盘导航）
+     ============================================ */
+  AI.Radio = function (el, options) {
+    this.el = typeof el === 'string' ? document.querySelector(el) : el;
+    if (!this.el) return;
+
+    this.options = options || {};
+    this.size = this.options.size || this.el.getAttribute('data-size') || 'middle';
+    this.disabled = this.options.disabled || this.el.classList.contains('ai-radio-group--disabled');
+    this.direction = this.options.direction || (this.el.classList.contains('ai-radio-group--vertical') ? 'vertical' : 'horizontal');
+    this.onChange = this.options.onChange || null;
+
+    // Determine initial value
+    var checkedItem = this.el.querySelector('.ai-radio-item--checked');
+    this.value = this.options.value != null
+      ? this.options.value
+      : (checkedItem ? checkedItem.getAttribute('data-value') : this.options.defaultValue);
+
+    this._idBase = 'ai-radio-' + Math.random().toString(36).slice(2, 10);
+    this._render();
+    this.el.addEventListener('keydown', this._onKeydown.bind(this));
+  };
+
+  AI.Radio.prototype._render = function () {
+    var sizeClass = this.size === 'small' ? 'ai-radio-item--sm'
+      : this.size === 'large' ? 'ai-radio-item--lg'
+      : 'ai-radio-item--md';
+    var dirClass = this.direction === 'vertical' ? 'ai-radio-group--vertical' : '';
+    var disabledClass = this.disabled ? 'ai-radio-group--disabled' : '';
+
+    var opts = this.options.options || this._collectOptions();
+    this._options = opts;
+
+    var html = '';
+    for (var i = 0; i < opts.length; i++) {
+      var opt = opts[i];
+      var isChecked = String(opt.value) === String(this.value);
+      var isDisabled = this.disabled || opt.disabled;
+      var cls = 'ai-radio-item ' + sizeClass;
+      if (isChecked) cls += ' ai-radio-item--checked';
+      if (isDisabled) cls += ' ai-radio-item--disabled';
+      var inputId = this._idBase + '-' + i;
+      html +=
+        '<label class="' + cls + '" data-value="' + _escapeHtml(String(opt.value)) + '">' +
+          '<span class="ai-radio-item__box">' +
+            '<input class="ai-radio-item__input" type="radio" name="' + this._idBase + '" id="' + inputId + '"' +
+              (isChecked ? ' checked' : '') + (isDisabled ? ' disabled' : '') + '>' +
+            '<span class="ai-radio-item__splash"></span>' +
+            '<svg class="ai-radio-item__check" fill="none" viewBox="0 0 15 14" height="14" width="15"><path d="M2 8.36364L6.23077 12L13 2"></path></svg>' +
+          '</span>' +
+          '<span class="ai-radio-item__label">' + (opt.label != null ? String(opt.label) : '') + '</span>' +
+        '</label>';
+    }
+    this.el.className = 'ai-radio-group ' + dirClass + ' ' + disabledClass;
+    this.el.setAttribute('role', 'radiogroup');
+    this.el.innerHTML = html;
+
+    var self = this;
+    var inputs = this.el.querySelectorAll('.ai-radio-item__input');
+    inputs.forEach(function (input, idx) {
+      input.addEventListener('change', function () { self._select(idx); });
+      input.addEventListener('focus', function () {
+        self._focusedIndex = idx;
+      });
+    });
+    this._focusedIndex = this._findIndex(this.value);
+  };
+
+  AI.Radio.prototype._collectOptions = function () {
+    var items = this.el.querySelectorAll('.ai-radio-item');
+    var result = [];
+    items.forEach(function (item) {
+      result.push({
+        value: item.getAttribute('data-value'),
+        label: (item.querySelector('.ai-radio-item__label') || {}).textContent || '',
+        disabled: item.classList.contains('ai-radio-item--disabled'),
+      });
+    });
+    return result;
+  };
+
+  AI.Radio.prototype._findIndex = function (value) {
+    for (var i = 0; i < this._options.length; i++) {
+      if (String(this._options[i].value) === String(value)) return i;
+    }
+    return 0;
+  };
+
+  AI.Radio.prototype._select = function (idx) {
+    if (idx < 0 || idx >= this._options.length) return;
+    var opt = this._options[idx];
+    if (this.disabled || opt.disabled) return;
+    this.value = opt.value;
+    this._focusedIndex = idx;
+    // Update DOM
+    var items = this.el.querySelectorAll('.ai-radio-item');
+    items.forEach(function (item, i) {
+      var input = item.querySelector('.ai-radio-item__input');
+      if (i === idx) {
+        item.classList.add('ai-radio-item--checked');
+        if (input) input.checked = true;
+      } else {
+        item.classList.remove('ai-radio-item--checked');
+        if (input) input.checked = false;
+      }
+    });
+    this.el.dispatchEvent(new CustomEvent('ai-radio-change', { detail: { value: this.value }, bubbles: true }));
+    if (this.onChange) this.onChange(this.value);
+  };
+
+  AI.Radio.prototype._onKeydown = function (e) {
+    var enabled = [];
+    for (var i = 0; i < this._options.length; i++) {
+      if (!this.disabled && !this._options[i].disabled) enabled.push(i);
+    }
+    if (!enabled.length) return;
+
+    var currentPos = enabled.indexOf(this._focusedIndex);
+    if (currentPos === -1) currentPos = 0;
+    var nextPos = -1;
+
+    switch (e.key) {
+      case 'ArrowRight':
+      case 'ArrowDown':
+        e.preventDefault();
+        nextPos = (currentPos + 1) % enabled.length;
+        break;
+      case 'ArrowLeft':
+      case 'ArrowUp':
+        e.preventDefault();
+        nextPos = (currentPos - 1 + enabled.length) % enabled.length;
+        break;
+      case 'Home':
+        e.preventDefault();
+        nextPos = 0;
+        break;
+      case 'End':
+        e.preventDefault();
+        nextPos = enabled.length - 1;
+        break;
+      default:
+        return;
+    }
+
+    if (nextPos >= 0) {
+      var nextIdx = enabled[nextPos];
+      this._select(nextIdx);
+      var input = this.el.querySelectorAll('.ai-radio-item__input')[nextIdx];
+      if (input) input.focus();
+    }
+  };
+
+  AI.Radio.prototype.getValue = function () { return this.value; };
+  AI.Radio.prototype.setValue = function (value) { this._select(this._findIndex(value)); };
+  AI.Radio.prototype.disable = function () { this.disabled = true; this._render(); };
+  AI.Radio.prototype.enable = function () { this.disabled = false; this._render(); };
+
+  /* ============================================
+     Tooltip — 工具提示（hover/focus/click）
+     ============================================ */
+  AI.Tooltip = function (el, options) {
+    this.el = typeof el === 'string' ? document.querySelector(el) : el;
+    if (!this.el) return;
+
+    this.options = options || {};
+    this.title = this.options.title || this.el.getAttribute('data-title') || '';
+    this.placement = this.options.placement || this.el.getAttribute('data-placement') || 'top';
+    this.trigger = this.options.trigger || this.el.getAttribute('data-trigger') || 'hover';
+    this.variant = this.options.variant || this.el.getAttribute('data-variant') || 'default';
+    this.bordered = this.options.bordered !== false;
+    if (this.el.getAttribute('data-borderless') === 'true') this.bordered = false;
+
+    this._visible = false;
+    this._timer = null;
+    this._render();
+    this._bindTrigger();
+  };
+
+  AI.Tooltip.prototype._render = function () {
+    var tip = this.el.querySelector('.ai-tooltip');
+    if (!tip) {
+      tip = document.createElement('div');
+      tip.className = 'ai-tooltip';
+      tip.setAttribute('role', 'tooltip');
+      this.el.appendChild(tip);
+    }
+
+    var cls = 'ai-tooltip ai-tooltip--' + this.placement +
+      (this.variant === 'island' ? ' ai-tooltip--island' : '') +
+      (this.bordered ? ' ai-tooltip--bordered' : ' ai-tooltip--borderless');
+    tip.className = cls;
+
+    if (this.variant === 'island') {
+      tip.innerHTML =
+        '<div class="ai-tooltip__island-body">' +
+          '<svg class="ai-tooltip__island-svg" viewBox="0 0 1 1" preserveAspectRatio="none" aria-hidden="true">' +
+            '<path d="M0.501,0.005 L0.549,0.006 C0.704,0.01,0.796,0.017,0.825,0.027 L0.827,0.028 C0.872,0.045,0.939,0.044,0.978,0.17 C1,0.254,1,0.365,0.99,0.505 L0.988,0.513 C0.979,0.558,0.971,0.598,0.965,0.633 C0.956,0.689,0.979,0.77,0.964,0.865 C0.953,0.928,0.921,0.966,0.869,0.979 C0.821,0.986,0.773,0.992,0.726,0.995 L0.694,0.997 C0.648,1,0.586,1,0.507,1 L0.464,1 C0.385,1,0.325,0.998,0.283,0.995 C0.234,0.992,0.184,0.987,0.133,0.979 C0.081,0.966,0.05,0.928,0.039,0.865 C0.023,0.77,0.047,0.689,0.037,0.633 C0.031,0.595,0.023,0.552,0.013,0.505 C-0.006,0.365,-0.002,0.254,0.024,0.17 C0.064,0.045,0.13,0.045,0.174,0.028 L0.175,0.028 C0.204,0.017,0.303,0.009,0.474,0.005 L0.501,0.005" ' +
+              'fill="rgb(247, 243, 223)" stroke="#c4b89e" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round"></path>' +
+          '</svg>' +
+          '<div class="ai-tooltip__island-content"><div class="ai-tooltip__content">' + this.title + '</div></div>' +
+        '</div>' +
+        '<span class="ai-tooltip__tail" aria-hidden="true"></span>';
+    } else {
+      tip.innerHTML = '<div class="ai-tooltip__content">' + this.title + '</div>';
+    }
+
+    this._tip = tip;
+  };
+
+  AI.Tooltip.prototype._bindTrigger = function () {
+    var self = this;
+    if (this.trigger === 'hover') {
+      this.el.addEventListener('mouseenter', function () { self.show(); });
+      this.el.addEventListener('mouseleave', function () { self.hide(); });
+      this._tip.addEventListener('mouseenter', function () { self.show(); });
+      this._tip.addEventListener('mouseleave', function () { self.hide(); });
+    } else if (this.trigger === 'focus') {
+      var triggerEl = this.el.firstElementChild;
+      if (triggerEl) {
+        triggerEl.addEventListener('focus', function () { self.show(); });
+        triggerEl.addEventListener('blur', function () { self.hide(); });
+      }
+    } else if (this.trigger === 'click') {
+      var clickEl = this.el.firstElementChild || this.el;
+      clickEl.addEventListener('click', function (e) {
+        e.stopPropagation();
+        self._visible ? self.hide() : self.show();
+      });
+      document.addEventListener('click', function (e) {
+        if (!self.el.contains(e.target)) self.hide();
+      });
+    }
+  };
+
+  AI.Tooltip.prototype.show = function () {
+    var self = this;
+    clearTimeout(this._timer);
+    this._timer = setTimeout(function () {
+      self._visible = true;
+      self._tip.classList.add('ai-tooltip--visible');
+      self._tip.setAttribute('aria-hidden', 'false');
+    }, 0);
+  };
+
+  AI.Tooltip.prototype.hide = function () {
+    var self = this;
+    clearTimeout(this._timer);
+    this._timer = setTimeout(function () {
+      self._visible = false;
+      self._tip.classList.remove('ai-tooltip--visible');
+      self._tip.setAttribute('aria-hidden', 'true');
+    }, 100);
+  };
+
+  AI.Tooltip.prototype.setTitle = function (title) {
+    this.title = title;
+    this._render();
+  };
+
+  AI.Tooltip.prototype.destroy = function () {
+    clearTimeout(this._timer);
+    if (this._tip && this._tip.parentNode) {
+      this._tip.parentNode.removeChild(this._tip);
+    }
+  };
+
+  /* ============================================
+     BackTop — 返回顶部
+     ============================================ */
+  AI.BackTop = function (el, options) {
+    this.el = typeof el === 'string' ? document.querySelector(el) : el;
+    if (!this.el) {
+      this.el = document.createElement('button');
+      this.el.className = 'ai-backtop';
+      this.el.setAttribute('type', 'button');
+      this.el.setAttribute('aria-label', '返回顶部');
+      document.body.appendChild(this.el);
+    }
+
+    this.options = options || {};
+    this.visibilityHeight = this.options.visibilityHeight || 400;
+    this.duration = this.options.duration || 300;
+    this.onClick = this.options.onClick || null;
+
+    // Target: window by default, or options.target() returning HTMLElement
+    this._getTarget = this.options.target
+      ? this.options.target
+      : function () { return window; };
+
+    // Build inner image if not present
+    var img = this.el.querySelector('.ai-backtop__img');
+    if (!img) {
+      img = document.createElement('img');
+      img.className = 'ai-backtop__img';
+      img.alt = '返回顶部';
+      img.src = this.options.imgSrc || AI.BackTop.DEFAULT_IMG;
+      this.el.appendChild(img);
+    }
+    this.el.setAttribute('role', 'button');
+    this.el.setAttribute('tabindex', '0');
+
+    this._onScroll = this._onScroll.bind(this);
+    this._scrollToTop = this._scrollToTop.bind(this);
+    this._onKeydown = this._onKeydown.bind(this);
+
+    this.el.addEventListener('click', this._scrollToTop);
+    this.el.addEventListener('keydown', this._onKeydown);
+
+    var target = this._getTarget();
+    target.addEventListener('scroll', this._onScroll, { passive: true });
+    this._onScroll();
+  };
+
+  AI.BackTop.DEFAULT_IMG = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">' +
+      '<circle cx="60" cy="60" r="50" fill="#f7c34a" stroke="#d4a030" stroke-width="3"/>' +
+      '<path d="M60 35 L40 60 L52 60 L52 80 L68 80 L68 60 L80 60 Z" fill="#725d42"/>' +
+    '</svg>'
+  );
+
+  AI.BackTop.prototype._onScroll = function () {
+    var target = this._getTarget();
+    var scrollTop = target === window ? window.scrollY : target.scrollTop;
+    if (scrollTop > this.visibilityHeight) {
+      this.el.classList.add('ai-backtop--visible');
+    } else {
+      this.el.classList.remove('ai-backtop--visible');
+    }
+  };
+
+  AI.BackTop.prototype._scrollToTop = function (e) {
+    var target = this._getTarget();
+    var start = target === window ? window.scrollY : target.scrollTop;
+    var startTime = performance.now();
+    var duration = this.duration;
+    var isWindow = target === window;
+
+    function animate(now) {
+      var elapsed = now - startTime;
+      var progress = Math.min(elapsed / duration, 1);
+      var eased = progress < 0.5 ? 2 * progress * progress : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+      var current = start * (1 - eased);
+      if (isWindow) {
+        window.scrollTo(0, current);
+      } else {
+        target.scrollTop = current;
+      }
+      if (progress < 1) requestAnimationFrame(animate);
+    }
+    requestAnimationFrame(animate);
+    if (this.onClick) this.onClick(e);
+  };
+
+  AI.BackTop.prototype._onKeydown = function (e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      this._scrollToTop(e);
+    }
+  };
+
+  AI.BackTop.prototype.destroy = function () {
+    var target = this._getTarget();
+    target.removeEventListener('scroll', this._onScroll);
+    this.el.removeEventListener('click', this._scrollToTop);
+    this.el.removeEventListener('keydown', this._onKeydown);
+    if (this.el.parentNode) this.el.parentNode.removeChild(this.el);
+  };
+
+  /* ============================================
+     Drawer — 抽屉（左/右/上/下，遮罩，景深）
+     ============================================ */
+  AI.Drawer = function (el, options) {
+    this.el = typeof el === 'string' ? document.querySelector(el) : el;
+    this.options = options || {};
+
+    this.placement = this.options.placement || (this.el && this.el.getAttribute('data-placement')) || 'right';
+    this.title = this.options.title || (this.el && this.el.getAttribute('data-title')) || '';
+    this.width = this.options.width || 378;
+    this.height = this.options.height || 300;
+    this.maskClosable = this.options.maskClosable !== false;
+    this.pushBackground = this.options.pushBackground !== false;
+    this.footer = this.options.footer != null ? this.options.footer : null;
+    this.bodyHTML = this.options.body != null ? this.options.body : null;
+    this.onClose = this.options.onClose || null;
+
+    this._open = false;
+    this._previouslyFocused = null;
+    this._pushed = [];
+    this._rafId = null;
+    this._restoreRafId = null;
+
+    if (this.el && this.el.nodeType) {
+      // Inline mode: read children as body, mount onto body
+      this._initFromExistingEl();
+    } else {
+      this.el = null;
+    }
+  };
+
+  AI.Drawer.prototype._initFromExistingEl = function () {
+    var self = this;
+    // Wrap existing content (children) as body content
+    var existingBody = '';
+    var children = Array.prototype.slice.call(this.el.childNodes);
+    children.forEach(function (c) {
+      if (c.nodeType === 1) existingBody += c.outerHTML;
+      else if (c.nodeType === 3) existingBody += c.textContent;
+    });
+    if (this.bodyHTML == null) this.bodyHTML = existingBody;
+    this.el.style.display = 'none';
+    this.el.setAttribute('aria-hidden', 'true');
+    // Listen for triggers via data attribute
+    var triggerSel = this.el.getAttribute('data-trigger');
+    if (triggerSel) {
+      var trigger = document.querySelector(triggerSel);
+      if (trigger) trigger.addEventListener('click', function () { self.open(); });
+    }
+  };
+
+  AI.Drawer.prototype._buildDOM = function () {
+    var self = this;
+    if (this._mask) return;
+
+    var mask = document.createElement('div');
+    mask.className = 'ai-drawer-mask';
+    mask.setAttribute('data-animal-drawer-portal', '');
+
+    var panel = document.createElement('div');
+    panel.className = 'ai-drawer ai-drawer--' + this.placement;
+    panel.setAttribute('role', 'dialog');
+    panel.setAttribute('aria-modal', 'true');
+    panel.setAttribute('tabindex', '-1');
+
+    if (this.placement === 'left' || this.placement === 'right') {
+      panel.style.width = typeof this.width === 'number' ? this.width + 'px' : this.width;
+    } else {
+      panel.style.height = typeof this.height === 'number' ? this.height + 'px' : this.height;
+    }
+
+    var html = '';
+    if (this.title) {
+      html += '<div class="ai-drawer__header">' +
+        '<div class="ai-drawer__title">' + this.title + '</div>' +
+        '<button type="button" class="ai-drawer__close" aria-label="关闭">×</button>' +
+      '</div>';
+    }
+    html += '<div class="ai-drawer__body">' + (this.bodyHTML || '') + '</div>';
+    if (this.footer) {
+      html += '<div class="ai-drawer__footer">' + this.footer + '</div>';
+    }
+    panel.innerHTML = html;
+
+    mask.appendChild(panel);
+    document.body.appendChild(mask);
+
+    // Click handlers
+    mask.addEventListener('click', function (e) {
+      if (e.target === mask && self.maskClosable) self.close();
+    });
+    var closeBtn = panel.querySelector('.ai-drawer__close');
+    if (closeBtn) closeBtn.addEventListener('click', function () { self.close(); });
+
+    // Keydown (ESC + Tab trap)
+    this._onKeydown = function (e) { self._handleKeydown(e); };
+
+    this._mask = mask;
+    this._panel = panel;
+  };
+
+  AI.Drawer.prototype._handleKeydown = function (e) {
+    if (e.key === 'Escape') {
+      this.close();
+      return;
+    }
+    if (e.key !== 'Tab') return;
+    var focusables = AI.Drawer._getFocusable(this._panel);
+    if (!focusables.length) {
+      e.preventDefault();
+      this._panel.focus();
+      return;
+    }
+    var first = focusables[0];
+    var last = focusables[focusables.length - 1];
+    var active = document.activeElement;
+    if (e.shiftKey) {
+      if (active === first || !this._panel.contains(active)) {
+        e.preventDefault();
+        last.focus();
+      }
+    } else {
+      if (active === last || !this._panel.contains(active)) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  };
+
+  AI.Drawer._getFocusable = function (root) {
+    var sel = 'a[href],area[href],button:not([disabled]),input:not([disabled]):not([type="hidden"]),' +
+      'select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"]),' +
+      'audio[controls],video[controls],[contenteditable]:not([contenteditable="false"])';
+    var result = [];
+    var all = root.querySelectorAll(sel);
+    for (var i = 0; i < all.length; i++) {
+      var el = all[i];
+      if (!el.hasAttribute('disabled') && el.getAttribute('aria-hidden') !== 'true') {
+        result.push(el);
+      }
+    }
+    return result;
+  };
+
+  AI.Drawer.prototype.open = function () {
+    if (this._open) return;
+    this._open = true;
+    this._buildDOM();
+    var self = this;
+
+    this._previouslyFocused = document.activeElement;
+    document.body.style.overflow = 'hidden';
+
+    requestAnimationFrame(function () {
+      self._mask.classList.add('ai-drawer-mask--open');
+      self._panel.classList.add('ai-drawer--open');
+      self._panel.setAttribute('aria-hidden', 'false');
+
+      setTimeout(function () {
+        var focusables = AI.Drawer._getFocusable(self._panel);
+        (focusables[0] || self._panel).focus();
+      }, 0);
+    });
+
+    if (this.pushBackground) this._applyPush();
+    document.addEventListener('keydown', this._onKeydown);
+  };
+
+  AI.Drawer.prototype.close = function () {
+    if (!this._open) return;
+    this._open = false;
+    var self = this;
+
+    this._mask.classList.remove('ai-drawer-mask--open');
+    this._panel.classList.remove('ai-drawer--open');
+    this._panel.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    document.removeEventListener('keydown', this._onKeydown);
+
+    setTimeout(function () {
+      if (self._mask && self._mask.parentNode) {
+        self._mask.parentNode.removeChild(self._mask);
+      }
+      self._mask = null;
+      self._panel = null;
+      if (self._previouslyFocused && self._previouslyFocused.focus) {
+        self._previouslyFocused.focus();
+      }
+    }, 360);
+
+    this._restorePush();
+    if (this.onClose) this.onClose();
+  };
+
+  AI.Drawer.prototype._applyPush = function () {
+    var self = this;
+    if (this._restoreRafId !== null) {
+      cancelAnimationFrame(this._restoreRafId);
+      this._restoreRafId = null;
+    }
+
+    var candidates = [];
+    var children = document.body.children;
+    for (var i = 0; i < children.length; i++) {
+      var el = children[i];
+      if (!(el instanceof HTMLElement)) continue;
+      var tag = el.tagName;
+      if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'NOSCRIPT') continue;
+      if (el.hasAttribute('data-animal-drawer-ignore')) continue;
+      if (el.hasAttribute('data-animal-drawer-portal')) continue;
+      if (getComputedStyle(el).position === 'fixed') continue;
+      candidates.push(el);
+    }
+
+    this._pushed = candidates.map(function (el) {
+      return {
+        el: el,
+        transform: el.style.transform,
+        filter: el.style.filter,
+        borderRadius: el.style.borderRadius,
+        overflow: el.style.overflow,
+        transition: el.style.transition,
+      };
+    });
+
+    candidates.forEach(function (el) {
+      el.style.transition = 'transform 0.36s cubic-bezier(0.2, 0, 0.2, 1), filter 0.36s ease, border-radius 0.36s ease';
+    });
+
+    this._rafId = requestAnimationFrame(function () {
+      candidates.forEach(function (el) {
+        el.style.transform = 'scale(0.94)';
+        el.style.filter = 'blur(1px)';
+        el.style.borderRadius = '14px';
+        el.style.overflow = 'hidden';
+      });
+    });
+  };
+
+  AI.Drawer.prototype._restorePush = function () {
+    var self = this;
+    if (this._rafId !== null) {
+      cancelAnimationFrame(this._rafId);
+      this._rafId = null;
+    }
+    this._pushed.forEach(function (item) {
+      item.el.style.transform = item.transform;
+      item.el.style.filter = item.filter;
+      item.el.style.borderRadius = item.borderRadius;
+      item.el.style.overflow = item.overflow;
+    });
+    this._restoreRafId = requestAnimationFrame(function () {
+      self._pushed.forEach(function (item) {
+        item.el.style.transition = item.transition;
+      });
+      self._restoreRafId = null;
+    });
+  };
+
+  AI.Drawer.prototype.isOpen = function () { return this._open; };
+
+  /* ============================================
+     Notification — 通知（命令式 API）
+     ============================================ */
+  AI.Notification = function () {};
+
+  AI.Notification._positions = ['top', 'topLeft', 'topRight', 'bottom', 'bottomLeft', 'bottomRight'];
+  AI.Notification._containers = {};
+  AI.Notification._items = {};
+  AI.Notification._idCounter = 0;
+
+  AI.Notification._getContainer = function (position) {
+    if (AI.Notification._containers[position]) return AI.Notification._containers[position];
+    var root = document.querySelector('.ai-notification-root');
+    if (!root) {
+      root = document.createElement('div');
+      root.className = 'ai-notification-root';
+      document.body.appendChild(root);
+    }
+    var pos = document.createElement('div');
+    pos.className = 'ai-notification-position ai-notification-position--' + position;
+    root.appendChild(pos);
+    AI.Notification._containers[position] = pos;
+    return pos;
+  };
+
+  AI.Notification._ICONS = {
+    success: '<svg viewBox="0 0 24 24" width="1em" height="1em" aria-hidden><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    info: '<svg viewBox="0 0 24 24" width="1em" height="1em" aria-hidden><circle cx="12" cy="7" r="1.6" fill="currentColor"/><path d="M12 11v7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>',
+    warning: '<svg viewBox="0 0 24 24" width="1em" height="1em" aria-hidden><path d="M12 4l9.5 16.5h-19z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><path d="M12 10v4M12 16.5v.01" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>',
+    error: '<svg viewBox="0 0 24 24" width="1em" height="1em" aria-hidden><path d="M6.5 6.5l11 11M17.5 6.5l-11 11" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>',
+  };
+
+  AI.Notification.open = function (config) {
+    var cfg = config || {};
+    var type = cfg.type || 'info';
+    var position = cfg.position || 'top';
+    var placement = position === 'bottom' || position === 'bottomLeft' || position === 'bottomRight' ? 'bottom' : 'top';
+    var duration = cfg.duration != null ? cfg.duration : 4.5;
+    var key = cfg.key || ('ai-notif-' + (++AI.Notification._idCounter));
+
+    // If key exists, update existing
+    if (AI.Notification._items[key]) {
+      AI.Notification._remove(key);
+    }
+
+    var container = AI.Notification._getContainer(position);
+    var notif = document.createElement('div');
+    notif.className = 'ai-notification ai-notification--' + type + ' ai-notification--placement-' + placement;
+    if (cfg.onClick) notif.classList.add('ai-notification--clickable');
+    if (cfg.className) notif.className += ' ' + cfg.className;
+    notif.setAttribute('data-notification-key', key);
+    if (cfg.onClick) {
+      notif.setAttribute('role', 'button');
+      notif.setAttribute('tabindex', '0');
+    }
+
+    var iconHTML = cfg.icon != null ? cfg.icon : AI.Notification._ICONS[type];
+    var html =
+      '<div class="ai-notification__icon-wrap" aria-hidden="true">' + iconHTML + '</div>' +
+      '<div class="ai-notification__body">' +
+        '<div class="ai-notification__title">' + (cfg.message != null ? String(cfg.message) : '') + '</div>';
+    if (cfg.description != null) {
+      html += '<div class="ai-notification__description">' + String(cfg.description) + '</div>';
+    }
+    html += '</div>';
+    if (cfg.btn) {
+      html += '<div class="ai-notification__btn-slot">' + cfg.btn + '</div>';
+    }
+    html += '<button type="button" class="ai-notification__close" aria-label="close">' + (cfg.closeIcon || '<span aria-hidden="true">×</span>') + '</button>';
+    notif.innerHTML = html;
+
+    notif.addEventListener('click', function (e) {
+      if (e.target.closest('.ai-notification__close')) return;
+      if (cfg.onClick) cfg.onClick();
+    });
+    var closeBtn = notif.querySelector('.ai-notification__close');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        AI.Notification._remove(key);
+        if (cfg.onClose) cfg.onClose();
+      });
+    }
+
+    container.appendChild(notif);
+
+    var item = {
+      key: key,
+      el: notif,
+      timer: duration > 0 ? setTimeout(function () {
+        AI.Notification._remove(key);
+        if (cfg.onClose) cfg.onClose();
+      }, duration * 1000) : null,
+      onClose: cfg.onClose,
+    };
+    AI.Notification._items[key] = item;
+    return key;
+  };
+
+  AI.Notification._remove = function (key) {
+    var item = AI.Notification._items[key];
+    if (!item) return;
+    if (item.timer) { clearTimeout(item.timer); item.timer = null; }
+    var el = item.el;
+    if (!el) { delete AI.Notification._items[key]; return; }
+
+    el.classList.add('ai-notification--leaving');
+    setTimeout(function () {
+      if (el.parentNode) el.parentNode.removeChild(el);
+      delete AI.Notification._items[key];
+    }, 250);
+  };
+
+  AI.Notification.success = function (cfg) { cfg = Object.assign({}, cfg); cfg.type = 'success'; return AI.Notification.open(cfg); };
+  AI.Notification.info = function (cfg) { cfg = Object.assign({}, cfg); cfg.type = 'info'; return AI.Notification.open(cfg); };
+  AI.Notification.warning = function (cfg) { cfg = Object.assign({}, cfg); cfg.type = 'warning'; return AI.Notification.open(cfg); };
+  AI.Notification.error = function (cfg) { cfg = Object.assign({}, cfg); cfg.type = 'error'; return AI.Notification.open(cfg); };
+
+  AI.Notification.close = function (key) { AI.Notification._remove(key); };
+
+  AI.Notification.destroy = function () {
+    Object.keys(AI.Notification._items).forEach(function (k) {
+      AI.Notification._remove(k);
+    });
+    AI.Notification._positions.forEach(function (p) {
+      var c = AI.Notification._containers[p];
+      if (c && c.parentNode) c.parentNode.removeChild(c);
+      delete AI.Notification._containers[p];
+    });
+  };
+
+  /* ============================================
+     Form — 表单（校验、值管理、提交）
+     ============================================ */
+  AI.Form = function (el, options) {
+    this.el = typeof el === 'string' ? document.querySelector(el) : el;
+    if (!this.el) return;
+
+    this.options = options || {};
+    this.layout = this.options.layout || this.el.getAttribute('data-layout') || 'horizontal';
+    this.size = this.options.size || 'middle';
+    this.disabled = !!this.options.disabled;
+    this.labelAlign = this.options.labelAlign || (this.layout === 'horizontal' ? 'right' : 'left');
+    this.colon = this.options.colon !== false;
+    this.requiredMark = this.options.requiredMark !== undefined ? this.options.requiredMark : false;
+
+    this.onFinish = this.options.onFinish || null;
+    this.onFinishFailed = this.options.onFinishFailed || null;
+    this.onValuesChange = this.options.onValuesChange || null;
+    this.onReset = this.options.onReset || null;
+
+    this._fields = {};      // name -> { el, rules, value, errors, touched, validating }
+    this._initialValues = this.options.initialValues || {};
+
+    this._init();
+  };
+
+  AI.Form._defaultValidators = {
+    required: function (value, rule) {
+      if (rule.required === false) return null;
+      if (value === undefined || value === null || value === '') return rule.message || '该字段为必填项';
+      if (typeof value === 'string' && rule.whitespace && !value.trim()) return rule.message || '该字段不能全为空白';
+      if (Array.isArray(value) && value.length === 0) return rule.message || '至少选择一项';
+      return null;
+    },
+    type: function (value, rule) {
+      if (value === undefined || value === null || value === '') return null;
+      var t = rule.type;
+      var ok = true;
+      try {
+        if (t === 'email') ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value));
+        else if (t === 'url') ok = /^https?:\/\//.test(String(value));
+        else if (t === 'number') ok = !isNaN(Number(value));
+        else if (t === 'integer') ok = /^-?\d+$/.test(String(value));
+        else if (t === 'float') ok = /^-?\d+(\.\d+)?$/.test(String(value));
+        else if (t === 'boolean') ok = value === true || value === false || value === 'true' || value === 'false';
+        else if (t === 'array') ok = Array.isArray(value);
+        else if (t === 'object') ok = typeof value === 'object' && !Array.isArray(value);
+        else if (t === 'date') ok = value instanceof Date || !isNaN(Date.parse(value));
+        else if (t === 'string') ok = typeof value === 'string';
+      } catch (e) { ok = false; }
+      return ok ? null : (rule.message || '类型不正确，应为 ' + t);
+    },
+    min: function (value, rule) {
+      if (value === undefined || value === null || value === '') return null;
+      var numericType = rule.type === 'number' || rule.type === 'integer' || rule.type === 'float';
+      if (numericType || typeof value === 'number') {
+        var num = Number(value);
+        if (!isNaN(num) && num < rule.min) return rule.message || '不能小于 ' + rule.min;
+      } else if (typeof value === 'string' || Array.isArray(value)) {
+        if (value.length < rule.min) return rule.message || '长度不能少于 ' + rule.min;
+      }
+      return null;
+    },
+    max: function (value, rule) {
+      if (value === undefined || value === null || value === '') return null;
+      var numericType = rule.type === 'number' || rule.type === 'integer' || rule.type === 'float';
+      if (numericType || typeof value === 'number') {
+        var num = Number(value);
+        if (!isNaN(num) && num > rule.max) return rule.message || '不能大于 ' + rule.max;
+      } else if (typeof value === 'string' || Array.isArray(value)) {
+        if (value.length > rule.max) return rule.message || '长度不能超过 ' + rule.max;
+      }
+      return null;
+    },
+    len: function (value, rule) {
+      if (value === undefined || value === null || value === '') return null;
+      if (typeof value === 'string' || Array.isArray(value)) {
+        if (value.length !== rule.len) return rule.message || '长度必须为 ' + rule.len;
+      }
+      return null;
+    },
+    pattern: function (value, rule) {
+      if (value === undefined || value === null || value === '') return null;
+      if (!rule.pattern.test(String(value))) return rule.message || '格式不正确';
+      return null;
+    },
+    validator: function (value, rule) {
+      if (typeof rule.validator !== 'function') return null;
+      try {
+        var result = rule.validator(rule, value);
+        if (result instanceof Promise) {
+          return result.then(function (msg) { return msg || null; });
+        }
+        return result || null;
+      } catch (e) {
+        return e.message || '校验失败';
+      }
+    },
+  };
+
+  AI.Form.prototype._init = function () {
+    var self = this;
+    // Layout class
+    var layoutCls = this.layout === 'vertical' ? 'ai-form--vertical'
+      : this.layout === 'inline' ? 'ai-form--inline'
+      : 'ai-form--horizontal';
+    var sizeCls = this.size === 'small' ? 'ai-form--small'
+      : this.size === 'large' ? 'ai-form--large'
+      : 'ai-form--middle';
+    this.el.className = 'ai-form ' + layoutCls + ' ' + sizeCls + (this.disabled ? ' ai-form--disabled' : '');
+
+    // Collect Form.Items
+    var items = this.el.querySelectorAll('.ai-form-item');
+    items.forEach(function (item) {
+      var name = item.getAttribute('data-name');
+      if (!name) return;
+      var rulesAttr = item.getAttribute('data-rules');
+      var rules = rulesAttr ? JSON.parse(rulesAttr) : [];
+      var control = item.querySelector('.ai-form-item__control-input') || item.querySelector('.ai-form-item__control');
+      var inputEl = control ? control.querySelector('input,textarea,select') : null;
+
+      self._fields[name] = {
+        el: item,
+        name: name,
+        rules: rules,
+        value: self._initialValues[name] !== undefined ? self._initialValues[name] : (inputEl ? inputEl.value : ''),
+        errors: [],
+        touched: false,
+        validating: false,
+        inputEl: inputEl,
+      };
+
+      if (inputEl) {
+        inputEl.addEventListener('input', function () {
+          self._setFieldValue(name, inputEl.value, { touch: true });
+        });
+        inputEl.addEventListener('change', function () {
+          self._setFieldValue(name, inputEl.value, { touch: true });
+        });
+        inputEl.addEventListener('blur', function () {
+          self._validateField(name);
+        });
+        // Apply initial value
+        if (self._initialValues[name] !== undefined) {
+          inputEl.value = self._initialValues[name];
+        }
+      }
+    });
+
+    // Submit handler
+    this.el.addEventListener('submit', function (e) {
+      e.preventDefault();
+      self.submit();
+    });
+    if (this.options.onReset !== undefined || this.el.querySelector('button[type="reset"]')) {
+      this.el.addEventListener('reset', function (e) {
+        // Allow default reset, then sync fields
+        setTimeout(function () { self._afterReset(); }, 0);
+      });
+    }
+  };
+
+  AI.Form.prototype._setFieldValue = function (name, value, opts) {
+    var field = this._fields[name];
+    if (!field) return;
+    var prev = field.value;
+    field.value = value;
+    if (opts && opts.touch) field.touched = true;
+    if (prev !== value) {
+      if (this.onValuesChange) {
+        var changed = {}; changed[name] = value;
+        this.onValuesChange(changed, this.getFieldsValue());
+      }
+    }
+  };
+
+  AI.Form.prototype._afterReset = function () {
+    var self = this;
+    Object.keys(this._fields).forEach(function (name) {
+      var field = self._fields[name];
+      field.value = self._initialValues[name] !== undefined ? self._initialValues[name] : '';
+      field.errors = [];
+      field.touched = false;
+      if (field.inputEl) field.inputEl.value = field.value;
+      self._renderFieldError(name);
+    });
+    if (this.onReset) this.onReset();
+  };
+
+  AI.Form.prototype._validateField = function (name) {
+    var field = this._fields[name];
+    if (!field) return Promise.resolve();
+    var value = field.value;
+    var errors = [];
+    var self = this;
+
+    field.validating = true;
+    self._renderFieldError(name);
+
+    var promises = [];
+    for (var i = 0; i < field.rules.length; i++) {
+      var rule = field.rules[i];
+      var validators = AI.Form._defaultValidators;
+      // Try each known validator key
+      ['required', 'type', 'min', 'max', 'len', 'pattern', 'validator'].forEach(function (key) {
+        if (rule[key] === undefined && key !== 'validator') return;
+        if (key === 'validator' && typeof rule.validator !== 'function') return;
+        if (key === 'required' && rule.required === false) return;
+        if (key === 'type' && !rule.type) return;
+        if (key === 'min' && rule.min === undefined) return;
+        if (key === 'max' && rule.max === undefined) return;
+        if (key === 'len' && rule.len === undefined) return;
+        if (key === 'pattern' && !rule.pattern) return;
+        var fn = validators[key];
+        var result = fn(value, rule);
+        if (result instanceof Promise) {
+          promises.push(result.then(function (msg) { if (msg) errors.push(msg); }));
+        } else if (result) {
+          errors.push(result);
+        }
+      });
+    }
+
+    return Promise.all(promises).then(function () {
+      field.errors = errors;
+      field.validating = false;
+      self._renderFieldError(name);
+      return errors;
+    });
+  };
+
+  AI.Form.prototype._renderFieldError = function (name) {
+    var field = this._fields[name];
+    if (!field) return;
+    var item = field.el;
+    item.classList.remove('ai-form-item--has-error', 'ai-form-item--has-warning', 'ai-form-item--has-success', 'ai-form-item--is-validating');
+    if (field.validating) {
+      item.classList.add('ai-form-item--is-validating');
+    } else if (field.errors.length) {
+      item.classList.add('ai-form-item--has-error');
+    }
+
+    // Append explain INSIDE the control div (so it stacks below the input in all layouts)
+    var control = item.querySelector('.ai-form-item__control') || item;
+    var explain = control.querySelector('.ai-form-item__explain');
+    if (!explain) {
+      explain = document.createElement('div');
+      explain.className = 'ai-form-item__explain';
+      control.appendChild(explain);
+    }
+    if (field.validating) {
+      explain.className = 'ai-form-item__explain';
+      explain.textContent = '校验中...';
+    } else if (field.errors.length) {
+      explain.className = 'ai-form-item__explain ai-form-item__explain--error';
+      explain.textContent = field.errors[0];
+    } else {
+      explain.className = 'ai-form-item__explain';
+      explain.textContent = '';
+    }
+  };
+
+  AI.Form.prototype.getFieldValue = function (name) {
+    var field = this._fields[name];
+    return field ? field.value : undefined;
+  };
+
+  AI.Form.prototype.getFieldsValue = function (nameList) {
+    var self = this;
+    var result = {};
+    var names = nameList === true ? Object.keys(this._fields)
+      : Array.isArray(nameList) ? nameList
+      : Object.keys(this._fields);
+    names.forEach(function (n) {
+      if (self._fields[n]) result[n] = self._fields[n].value;
+    });
+    return result;
+  };
+
+  AI.Form.prototype.setFieldValue = function (name, value) {
+    var field = this._fields[name];
+    if (!field) return;
+    field.value = value;
+    if (field.inputEl) field.inputEl.value = value;
+    if (this.onValuesChange) {
+      var changed = {}; changed[name] = value;
+      this.onValuesChange(changed, this.getFieldsValue());
+    }
+  };
+
+  AI.Form.prototype.setFieldsValue = function (values) {
+    var self = this;
+    if (!values) return;
+    Object.keys(values).forEach(function (name) {
+      self.setFieldValue(name, values[name]);
+    });
+  };
+
+  AI.Form.prototype.resetFields = function (nameList) {
+    var self = this;
+    var names = Array.isArray(nameList) ? nameList : Object.keys(this._fields);
+    names.forEach(function (n) {
+      var field = self._fields[n];
+      if (!field) return;
+      field.value = self._initialValues[n] !== undefined ? self._initialValues[n] : '';
+      field.errors = [];
+      field.touched = false;
+      if (field.inputEl) field.inputEl.value = field.value;
+      self._renderFieldError(n);
+    });
+    if (this.onReset) this.onReset();
+  };
+
+  AI.Form.prototype.validateFields = function (nameList) {
+    var self = this;
+    var names = Array.isArray(nameList) ? nameList : Object.keys(this._fields);
+    var promises = names.map(function (n) { return self._validateField(n); });
+    return Promise.all(promises).then(function (results) {
+      var errorFields = [];
+      var values = {};
+      results.forEach(function (errs, i) {
+        var name = names[i];
+        values[name] = self._fields[name].value;
+        if (errs && errs.length) {
+          errorFields.push({ name: name, errors: errs });
+        }
+      });
+      if (errorFields.length) {
+        return Promise.reject({ values: values, errorFields: errorFields, outOfDate: false });
+      }
+      return values;
+    });
+  };
+
+  AI.Form.prototype.submit = function () {
+    var self = this;
+    this.validateFields().then(
+      function (values) {
+        if (self.onFinish) self.onFinish(values);
+      },
+      function (info) {
+        if (self.onFinishFailed) self.onFinishFailed(info);
+      }
+    );
+  };
+
+  AI.Form.prototype.getFieldError = function (name) {
+    var field = this._fields[name];
+    return field ? field.errors : undefined;
+  };
+
+  AI.Form.prototype.isFieldTouched = function (name) {
+    var field = this._fields[name];
+    return field ? field.touched : false;
+  };
+
+  AI.Form.prototype.isFieldValidating = function (name) {
+    var field = this._fields[name];
+    return field ? field.validating : false;
+  };
+
+  AI.Form.prototype.scrollToField = function (name, options) {
+    var field = this._fields[name];
+    if (field && field.el && field.el.scrollIntoView) {
+      field.el.scrollIntoView(options || { behavior: 'smooth', block: 'center' });
+    }
+  };
+
+  /* ============================================
      Auto-init — 自动初始化 data-ai 属性
      ============================================ */
   AI.autoInit = function () {
@@ -1410,6 +2862,73 @@
       var columns = columnsAttr ? JSON.parse(columnsAttr) : [];
       var dataSource = dataSourceAttr ? JSON.parse(dataSourceAttr) : [];
       new AI.Table(el, { columns: columns, dataSource: dataSource });
+    });
+
+    // -- Tag: 可关闭/可点击标签
+    document.querySelectorAll('[data-ai="tag"]').forEach(function (el) {
+      new AI.Tag(el);
+    });
+
+    // -- Skeleton: 骨架屏
+    document.querySelectorAll('[data-ai="skeleton"]').forEach(function (el) {
+      var variant = el.getAttribute('data-variant') || 'text';
+      var options = { variant: variant, active: el.getAttribute('data-active') !== 'false' };
+      if (el.getAttribute('data-rows')) options.rows = parseInt(el.getAttribute('data-rows'), 10);
+      if (el.getAttribute('data-width')) options.width = el.getAttribute('data-width');
+      if (el.getAttribute('data-width-value')) options.widthValue = el.getAttribute('data-width-value');
+      if (el.getAttribute('data-height-value')) options.heightValue = el.getAttribute('data-height-value');
+      new AI.Skeleton(el, options);
+    });
+
+    // -- Progress: 进度条
+    document.querySelectorAll('[data-ai="progress"]').forEach(function (el) {
+      new AI.Progress(el);
+    });
+    document.querySelectorAll('.ai-progress[data-percent]').forEach(function (el) {
+      if (!el.hasAttribute('data-ai')) new AI.Progress(el);
+    });
+
+    // -- Wallet: 钱包
+    document.querySelectorAll('[data-ai="wallet"]').forEach(function (el) {
+      new AI.Wallet(el);
+    });
+    document.querySelectorAll('.ai-wallet[data-value]').forEach(function (el) {
+      if (!el.hasAttribute('data-ai')) new AI.Wallet(el);
+    });
+
+    // -- Radio: 单选组
+    document.querySelectorAll('[data-ai="radio"]').forEach(function (el) {
+      var options = {};
+      var optsAttr = el.getAttribute('data-options');
+      if (optsAttr) {
+        try { options.options = JSON.parse(optsAttr); } catch (e) {}
+      }
+      var dirAttr = el.getAttribute('data-direction');
+      if (dirAttr) options.direction = dirAttr;
+      if (el.getAttribute('data-disabled') === 'true') options.disabled = true;
+      var valAttr = el.getAttribute('data-value');
+      if (valAttr != null) options.value = valAttr;
+      new AI.Radio(el, options);
+    });
+
+    // -- Tooltip: 工具提示
+    document.querySelectorAll('[data-ai="tooltip"]').forEach(function (el) {
+      new AI.Tooltip(el);
+    });
+
+    // -- BackTop: 返回顶部
+    document.querySelectorAll('[data-ai="backtop"]').forEach(function (el) {
+      new AI.BackTop(el);
+    });
+
+    // -- Drawer: 抽屉（inline 模式）
+    document.querySelectorAll('[data-ai="drawer"]').forEach(function (el) {
+      new AI.Drawer(el);
+    });
+
+    // -- Form: 表单
+    document.querySelectorAll('[data-ai="form"]').forEach(function (el) {
+      new AI.Form(el);
     });
   };
 

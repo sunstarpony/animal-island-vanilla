@@ -25,14 +25,25 @@
         { key: 'footer', label: 'Footer 页脚' },
         { key: 'codeblock', label: 'CodeBlock 代码高亮' },
         { key: 'loading', label: 'Loading 加载' },
-        { key: 'table', label: 'Table 表格' }
+        { key: 'table', label: 'Table 表格' },
+        { key: 'tag', label: 'Tag 标签' },
+        { key: 'title', label: 'Title 标题' },
+        { key: 'skeleton', label: 'Skeleton 骨架屏' },
+        { key: 'progress', label: 'Progress 进度条' },
+        { key: 'radio', label: 'Radio 单选框' }
       ]
     },
     {
       category: '── 复杂组件 ──',
       items: [
         { key: 'time', label: 'Time 时间' },
-        { key: 'phone', label: 'Phone 手机' }
+        { key: 'phone', label: 'Phone 手机' },
+        { key: 'wallet', label: 'Wallet 钱包' },
+        { key: 'tooltip', label: 'Tooltip 工具提示' },
+        { key: 'backtop', label: 'BackTop 返回顶部' },
+        { key: 'drawer', label: 'Drawer 抽屉' },
+        { key: 'notification', label: 'Notification 通知' },
+        { key: 'form', label: 'Form 表单' }
       ]
     }
   ];
@@ -55,8 +66,19 @@
     codeblock: { title: 'CodeBlock 代码高亮', desc: '代码高亮组件 — 语法高亮显示，支持自定义样式和类名' },
     loading: { title: 'Loading 加载', desc: '动森风格小岛 Loading 动画组件，支持自定义样式和类名' },
     table: { title: 'Table 表格', desc: '数据表格组件，支持斑马纹、边框、加载状态等常用功能' },
+    tag: { title: 'Tag 标签', desc: '标签组件 — 4 种变体（solid/outlined/dashed/soft）、12 种配色、可关闭、可点击、禁用、三种尺寸' },
+    title: { title: 'Title 标题', desc: '动森风格缎带标题组件 — 三种尺寸、12 种配色、3D 立体缎带效果' },
+    skeleton: { title: 'Skeleton 骨架屏', desc: '骨架屏组件 — 支持 text/circle/rect/paragraph 四种变体，shimmer 动画' },
+    progress: { title: 'Progress 进度条', desc: '进度条组件 — 三种尺寸、三种信息位置（inside/right/top）、条纹动画、可动态更新' },
+    radio: { title: 'Radio 单选框', desc: '单选组件 — 支持受控/非受控、水平/垂直排列、键盘导航（方向键/Home/End）、三种尺寸' },
     time: { title: 'Time 时间', desc: '经典 HUD 风格的时间显示组件，实时更新时间' },
-    phone: { title: 'Phone 手机', desc: '动森风格手机界面，包含对话框和背包功能' }
+    phone: { title: 'Phone 手机', desc: '动森风格手机界面，包含对话框和背包功能' },
+    wallet: { title: 'Wallet 钱包', desc: '动森风格钱包组件 — 三种尺寸、千分位格式化、可动态更新金额' },
+    tooltip: { title: 'Tooltip 工具提示', desc: '工具提示组件 — 12 种 placement、hover/focus/click 触发、default/island 两种风格' },
+    backtop: { title: 'BackTop 返回顶部', desc: '返回顶部组件 — 滚动可见、平滑动画、可自定义滚动容器和触发高度' },
+    drawer: { title: 'Drawer 抽屉', desc: '抽屉组件 — 左/右/上/下四个方向、景深背景、遮罩关闭、ESC 关闭、焦点陷阱' },
+    notification: { title: 'Notification 通知', desc: '通知组件 — 命令式 API、四种类型、六个位置、自动关闭、可点击' },
+    form: { title: 'Form 表单', desc: '表单组件 — 字段管理、规则校验、提交/重置、初始值、错误提示' }
   };
 
   /* ==============================
@@ -122,7 +144,7 @@
   function renderHomePageInner() {
     var feats = [
       { icon: 'nook1.svg', title: 'Animal风格', desc: 'SVG 有机形状裁切，3D 按压按钮，温暖质朴的自然 UI 质感' },
-      { icon: 'Property-Shopping.svg', title: '19 个组件', desc: 'Button / Input / Switch / Modal / Typewriter / Card / Collapse / Cursor / Divider / Time / Phone / Footer / Icon / Checkbox / Select / Tabs / CodeBlock / Loading / Table' },
+      { icon: 'Property-Shopping.svg', title: '30 个组件', desc: 'Button / Input / Switch / Modal / Typewriter / Card / Collapse / Cursor / Divider / Time / Phone / Footer / Icon / Checkbox / Select / Tabs / CodeBlock / Loading / Table / Tag / Title / Skeleton / Progress / Radio / Wallet / Tooltip / BackTop / Drawer / Notification / Form' },
       { icon: 'Property-Camera.svg', title: '主题定制', desc: '40+ CSS 自定义属性，运行时换肤无需重新构建' },
       { icon: 'Property-Recipes.svg', title: '开箱即用', desc: '无需 npm / React / Node.js，直接下载引用即可使用' }
     ];
@@ -145,7 +167,18 @@
       { key: 'phone', name: 'Phone', desc: 'Phone 模拟器' },
       { key: 'codeblock', name: 'CodeBlock', desc: '代码语法高亮组件' },
       { key: 'loading', name: 'Loading', desc: '动森风格小岛加载动画' },
-      { key: 'table', name: 'Table', desc: '数据表格组件' }
+      { key: 'table', name: 'Table', desc: '数据表格组件' },
+      { key: 'tag', name: 'Tag', desc: '标签组件，4 种变体、12 种配色' },
+      { key: 'title', name: 'Title', desc: '动森缎带标题，3D 立体效果' },
+      { key: 'skeleton', name: 'Skeleton', desc: '骨架屏，4 种变体、shimmer 动画' },
+      { key: 'progress', name: 'Progress', desc: '进度条，条纹动画、动态更新' },
+      { key: 'radio', name: 'Radio', desc: '单选组件，键盘导航' },
+      { key: 'wallet', name: 'Wallet', desc: '动森风格钱包' },
+      { key: 'tooltip', name: 'Tooltip', desc: '工具提示，12 种位置' },
+      { key: 'backtop', name: 'BackTop', desc: '返回顶部，平滑动画' },
+      { key: 'drawer', name: 'Drawer', desc: '抽屉，4 方向、景深背景' },
+      { key: 'notification', name: 'Notification', desc: '通知，命令式 API' },
+      { key: 'form', name: 'Form', desc: '表单，校验、提交' }
     ];
 
     var h = '';
@@ -834,6 +867,407 @@
     '</div>';
   };
 
+  // -- Tag --
+  DEMOS.tag = function () {
+    var colors = ['default', 'app-pink', 'purple', 'app-blue', 'app-yellow', 'app-orange', 'app-teal', 'app-green', 'app-red', 'lime-green', 'yellow-green', 'brown', 'warm-peach-pink'];
+    var variantHTML = '';
+    ['solid', 'outlined', 'dashed', 'soft'].forEach(function (v) {
+      variantHTML += '<div class="demo-label">variant: ' + v + '</div><div class="demo-row" style="flex-wrap:wrap;gap:8px">';
+      colors.forEach(function (c) {
+        var cls = 'ai-tag ai-tag--md ai-tag--' + v + (c !== 'default' ? ' ai-tag--' + c : '');
+        variantHTML += '<span class="' + cls + '" data-ai="tag"><span class="ai-tag__text">' + (c === 'default' ? 'Default' : c) + '</span></span>';
+      });
+      variantHTML += '</div>';
+    });
+    return '<div class="demo-section">' +
+      '<div class="demo-section-title">Tag <span class="demo-tag">4 variants × 12 colors</span></div>' +
+      variantHTML +
+      '<div class="demo-label">size 尺寸</div>' +
+      '<div class="demo-row">' +
+        '<span class="ai-tag ai-tag--sm ai-tag--solid ai-tag--app-teal" data-ai="tag"><span class="ai-tag__text">Small</span></span>' +
+        '<span class="ai-tag ai-tag--md ai-tag--solid ai-tag--app-teal" data-ai="tag"><span class="ai-tag__text">Medium</span></span>' +
+        '<span class="ai-tag ai-tag--lg ai-tag--solid ai-tag--app-teal" data-ai="tag"><span class="ai-tag__text">Large</span></span>' +
+      '</div>' +
+      '<div class="demo-label">closable 可关闭</div>' +
+      '<div class="demo-row">' +
+        '<span class="ai-tag ai-tag--md ai-tag--soft ai-tag--app-pink" data-ai="tag"><span class="ai-tag__text">可关闭</span><button class="ai-tag__close" aria-label="close">×</button></span>' +
+        '<span class="ai-tag ai-tag--md ai-tag--solid ai-tag--app-blue" data-ai="tag"><span class="ai-tag__text">可关闭</span><button class="ai-tag__close" aria-label="close">×</button></span>' +
+      '</div>' +
+      '<div class="demo-label">clickable 可点击 + disabled 禁用</div>' +
+      '<div class="demo-row">' +
+        '<span class="ai-tag ai-tag--md ai-tag--solid ai-tag--app-green ai-tag--clickable" data-ai="tag" tabindex="0"><span class="ai-tag__text">点我</span></span>' +
+        '<span class="ai-tag ai-tag--md ai-tag--solid ai-tag--brown ai-tag--disabled" data-ai="tag"><span class="ai-tag__text">禁用</span></span>' +
+      '</div>' +
+      codeL('<span class="ai-tag ai-tag--md ai-tag--soft ai-tag--app-pink" data-ai="tag">\n  <span class="ai-tag__text">标签</span>\n  <button class="ai-tag__close" aria-label="close">×</button>\n</span>') +
+      apiT([
+        ['ai-tag--{variant}', '变体：solid/outlined/dashed/soft', 'class', 'soft'],
+        ['ai-tag--{color}', '配色：default/app-pink/purple/... 12 种', 'class', 'default'],
+        ['ai-tag--sm/md/lg', '尺寸', 'class', 'md'],
+        ['ai-tag--clickable', '可点击（含键盘支持）', 'class', '-'],
+        ['ai-tag--disabled', '禁用', 'class', '-'],
+        ['data-ai="tag"', '自动初始化（含关闭按钮）', 'attribute', '-'],
+        ['AI.Tag(el, {onClose, onClick})', 'JS API', 'function', '-']
+      ]) +
+    '</div>';
+  };
+
+  // -- Title --
+  DEMOS.title = function () {
+    var colors = ['default', 'app-pink', 'purple', 'app-blue', 'app-yellow', 'app-orange', 'app-teal', 'app-green', 'app-red', 'lime-green', 'yellow-green', 'brown', 'warm-peach-pink'];
+    var colorHTML = '<div class="demo-row" style="flex-wrap:wrap;gap:16px;align-items:center">';
+    colors.forEach(function (c) {
+      var cls = 'ai-title ai-title--md' + (c !== 'default' ? ' ai-title--' + c : '');
+      colorHTML += '<span class="' + cls + '"><span class="ai-title__ribbon">' +
+        '<span class="ai-title__back ai-title__back--left" aria-hidden="true"></span>' +
+        '<span class="ai-title__back ai-title__back--right" aria-hidden="true"></span>' +
+        '<span class="ai-title__fold ai-title__fold--left" aria-hidden="true"></span>' +
+        '<span class="ai-title__fold ai-title__fold--right" aria-hidden="true"></span>' +
+        '<span class="ai-title__front" aria-hidden="true"></span>' +
+        '<span class="ai-title__text">' + c + '</span>' +
+      '</span></span>';
+    });
+    colorHTML += '</div>';
+    return '<div class="demo-section">' +
+      '<div class="demo-section-title">Title <span class="demo-tag">3D Ribbon</span></div>' +
+      '<div class="demo-label">size 尺寸</div>' +
+      '<div class="demo-row" style="flex-wrap:wrap;gap:24px;align-items:center">' +
+        '<span class="ai-title ai-title--sm"><span class="ai-title__ribbon"><span class="ai-title__back ai-title__back--left" aria-hidden="true"></span><span class="ai-title__back ai-title__back--right" aria-hidden="true"></span><span class="ai-title__fold ai-title__fold--left" aria-hidden="true"></span><span class="ai-title__fold ai-title__fold--right" aria-hidden="true"></span><span class="ai-title__front" aria-hidden="true"></span><span class="ai-title__text">Small</span></span></span>' +
+        '<span class="ai-title ai-title--md"><span class="ai-title__ribbon"><span class="ai-title__back ai-title__back--left" aria-hidden="true"></span><span class="ai-title__back ai-title__back--right" aria-hidden="true"></span><span class="ai-title__fold ai-title__fold--left" aria-hidden="true"></span><span class="ai-title__fold ai-title__fold--right" aria-hidden="true"></span><span class="ai-title__front" aria-hidden="true"></span><span class="ai-title__text">Middle</span></span></span>' +
+        '<span class="ai-title ai-title--lg"><span class="ai-title__ribbon"><span class="ai-title__back ai-title__back--left" aria-hidden="true"></span><span class="ai-title__back ai-title__back--right" aria-hidden="true"></span><span class="ai-title__fold ai-title__fold--left" aria-hidden="true"></span><span class="ai-title__fold ai-title__fold--right" aria-hidden="true"></span><span class="ai-title__front" aria-hidden="true"></span><span class="ai-title__text">Large</span></span></span>' +
+      '</div>' +
+      '<div class="demo-label">color 配色 — 12 种</div>' + colorHTML +
+      '<div class="demo-label">JS API：动态创建</div>' +
+      '<div id="title-js-mount" style="padding:12px 0"></div>' +
+      codeL('<span class="ai-title ai-title--lg ai-title--app-teal">\n  <span class="ai-title__ribbon">\n    <span class="ai-title__back ai-title__back--left" aria-hidden="true"></span>\n    <span class="ai-title__back ai-title__back--right" aria-hidden="true"></span>\n    <span class="ai-title__fold ai-title__fold--left" aria-hidden="true"></span>\n    <span class="ai-title__fold ai-title__fold--right" aria-hidden="true"></span>\n    <span class="ai-title__front" aria-hidden="true"></span>\n    <span class="ai-title__text">动森标题</span>\n  </span>\n</span>\n// 或用 JS 工厂方法\nvar title = new AI.Title({ size: "large", color: "app-teal", text: "动森标题" });\ndocument.body.appendChild(title);') +
+      apiT([
+        ['ai-title--sm/md/lg', '尺寸', 'class', 'md'],
+        ['ai-title--{color}', '配色：default/app-pink/... 12 种', 'class', 'default'],
+        ['AI.Title({size, color, text})', 'JS 工厂方法（返回 DOM 元素）', 'function', '-']
+      ]) +
+    '</div>';
+  };
+
+  // -- Skeleton --
+  DEMOS.skeleton = function () {
+    return '<div class="demo-section">' +
+      '<div class="demo-section-title">Skeleton <span class="demo-tag">4 variants</span></div>' +
+      '<div class="demo-label">text 文本骨架</div>' +
+      '<div style="max-width:300px;display:flex;flex-direction:column;gap:8px">' +
+        '<div data-ai="skeleton" data-variant="text" data-width="100%"></div>' +
+        '<div data-ai="skeleton" data-variant="text" data-width="70%"></div>' +
+      '</div>' +
+      '<div class="demo-label">circle 圆形骨架</div>' +
+      '<div class="demo-row" style="gap:16px;align-items:center">' +
+        '<div data-ai="skeleton" data-variant="circle" data-width-value="44" data-height-value="44"></div>' +
+        '<div data-ai="skeleton" data-variant="circle" data-width-value="64" data-height-value="64"></div>' +
+      '</div>' +
+      '<div class="demo-label">rect 矩形骨架</div>' +
+      '<div data-ai="skeleton" data-variant="rect" data-width-value="100%" data-height-value="120" style="max-width:360px"></div>' +
+      '<div class="demo-label">paragraph 段落骨架</div>' +
+      '<div data-ai="skeleton" data-variant="paragraph" data-rows="4" style="max-width:360px"></div>' +
+      '<div class="demo-label">active=false 关闭动画</div>' +
+      '<div data-ai="skeleton" data-variant="text" data-active="false" data-width="60%" style="max-width:240px"></div>' +
+      codeL('<div data-ai="skeleton" data-variant="paragraph" data-rows="4"></div>\n<div data-ai="skeleton" data-variant="circle" data-width-value="44" data-height-value="44"></div>\n<div data-ai="skeleton" data-variant="rect" data-width-value="100%" data-height-value="120"></div>') +
+      apiT([
+        ['data-variant', '变体：text/circle/rect/paragraph', 'attribute', 'text'],
+        ['data-active', '是否启用 shimmer 动画', "'true'|'false'", "'true'"],
+        ['data-rows', '行数（paragraph 模式）', 'number', '3'],
+        ['data-width', '宽度（text 模式）', 'string', "'100%'"],
+        ['data-width-value', '宽度值（circle/rect）', 'string|number', '-'],
+        ['data-height-value', '高度值', 'string|number', '-'],
+        ['AI.Skeleton(el, {variant, active, rows, width, ...})', 'JS API', 'function', '-']
+      ]) +
+    '</div>';
+  };
+
+  // -- Progress --
+  DEMOS.progress = function () {
+    return '<div class="demo-section">' +
+      '<div class="demo-section-title">Progress <span class="demo-tag">动态更新</span></div>' +
+      '<div class="demo-label">size 尺寸 + infoPosition="inside"</div>' +
+      '<div style="max-width:480px;display:flex;flex-direction:column;gap:16px">' +
+        '<div data-ai="progress" data-percent="25" data-size="small"></div>' +
+        '<div data-ai="progress" data-percent="55" data-size="middle"></div>' +
+        '<div data-ai="progress" data-percent="80" data-size="large"></div>' +
+      '</div>' +
+      '<div class="demo-label">infoPosition="right" / "top"</div>' +
+      '<div style="max-width:480px;display:flex;flex-direction:column;gap:16px">' +
+        '<div data-ai="progress" data-percent="42" data-info-position="right"></div>' +
+        '<div data-ai="progress" data-percent="68" data-info-position="top"></div>' +
+      '</div>' +
+      '<div class="demo-label">动态更新（点击按钮 +5%）</div>' +
+      '<div style="display:flex;align-items:center;gap:12px;max-width:480px">' +
+        '<div id="progress-dynamic" data-ai="progress" data-percent="30" data-size="middle" style="flex:1"></div>' +
+        '<button class="ai-btn ai-btn--sm ai-btn--primary" id="progress-add-btn">+5%</button>' +
+      '</div>' +
+      codeL('<div data-ai="progress" data-percent="60" data-size="middle"></div>\n// JS API\nvar p = new AI.Progress(el, { percent: 60, size: "middle" });\np.setPercent(80);') +
+      apiT([
+        ['data-percent', '百分比（0-100）', 'number', '0'],
+        ['data-size', '尺寸：small/middle/large', 'string', "'middle'"],
+        ['data-info-position', '信息位置：inside/right/top', 'string', "'inside'"],
+        ['data-show-info', '是否显示信息', "'true'|'false'", "'true'"],
+        ['AI.Progress(el, {percent, size, infoPosition, duration, infoFormat})', 'JS API', 'function', '-'],
+        ['progress.setPercent(n)', '更新百分比', 'method', '-']
+      ]) +
+    '</div>';
+  };
+
+  // -- Radio --
+  DEMOS.radio = function () {
+    var fruitOpts = JSON.stringify([
+      { label: '苹果', value: 'apple' },
+      { label: '橘子', value: 'orange' },
+      { label: '樱桃', value: 'cherry' },
+      { label: '香蕉', value: 'banana' }
+    ]);
+    return '<div class="demo-section">' +
+      '<div class="demo-section-title">Radio <span class="demo-tag">键盘导航</span></div>' +
+      '<div class="demo-label">基础用法 — 水平</div>' +
+      '<div data-ai="radio" data-size="middle" data-value="apple" data-options=\'' + fruitOpts + '\'></div>' +
+      '<div class="demo-label">垂直布局</div>' +
+      '<div data-ai="radio" data-size="middle" data-direction="vertical" data-value="orange" data-options=\'' + fruitOpts + '\'></div>' +
+      '<div class="demo-label">size 尺寸</div>' +
+      '<div style="display:flex;flex-direction:column;gap:16px">' +
+        '<div data-ai="radio" data-size="small" data-value="apple" data-options=\'' + fruitOpts + '\'></div>' +
+        '<div data-ai="radio" data-size="large" data-value="cherry" data-options=\'' + fruitOpts + '\'></div>' +
+      '</div>' +
+      '<div class="demo-label">disabled 禁用</div>' +
+      '<div data-ai="radio" data-size="middle" data-disabled="true" data-value="banana" data-options=\'' + fruitOpts + '\'></div>' +
+      '<div class="demo-label">JS API：受控模式</div>' +
+      '<div id="radio-js-mount"></div>' +
+      '<div style="margin-top:8px">当前值：<span id="radio-js-value" style="color:#19c8b9;font-weight:700">apple</span></div>' +
+      codeL('<div data-ai="radio" data-size="middle" data-value="apple"\n  data-options=\'[{"label":"苹果","value":"apple"},{"label":"橘子","value":"orange"}]\'></div>\n// JS API\nvar r = new AI.Radio(el, {\n  size: "middle",\n  options: [{label:"苹果", value:"apple"}, {label:"橘子", value:"orange"}],\n  onChange: function (v) { console.log(v); }\n});\nr.getValue(); r.setValue("orange");') +
+      apiT([
+        ['data-size', '尺寸：small/middle/large', 'string', "'middle'"],
+        ['data-direction', '方向：horizontal/vertical', 'string', "'horizontal'"],
+        ['data-value', '受控当前值', 'string', '-'],
+        ['data-options', '选项数组（JSON）', 'string(JSON)', '-'],
+        ['data-disabled', '禁用全部', "'true'|'false'", "'false'"],
+        ['options', '选项数组（JS 模式）', 'Array', '-'],
+        ['AI.Radio(el, {size, options, value, onChange, ...})', 'JS API', 'function', '-'],
+        ['radio.getValue() / setValue(v)', '取/设值', 'method', '-']
+      ]) +
+    '</div>';
+  };
+
+  // -- Wallet --
+  DEMOS.wallet = function () {
+    return '<div class="demo-section">' +
+      '<div class="demo-section-title">Wallet <span class="demo-tag">钱包</span></div>' +
+      '<div class="demo-label">size 尺寸</div>' +
+      '<div class="demo-row" style="gap:32px;align-items:flex-end">' +
+        '<div data-ai="wallet" data-size="small" data-value="1234"></div>' +
+        '<div data-ai="wallet" data-size="medium" data-value="98765"></div>' +
+        '<div data-ai="wallet" data-size="large" data-value="1000000"></div>' +
+      '</div>' +
+      '<div class="demo-label">默认值 / 字符串值</div>' +
+      '<div class="demo-row" style="gap:32px;align-items:flex-end">' +
+        '<div data-ai="wallet"></div>' +
+        '<div data-ai="wallet" data-value="LOTS"></div>' +
+      '</div>' +
+      '<div class="demo-label">动态更新</div>' +
+      '<div style="display:flex;align-items:center;gap:16px">' +
+        '<div id="wallet-dynamic" data-ai="wallet" data-size="medium" data-value="500"></div>' +
+        '<button class="ai-btn ai-btn--sm ai-btn--primary" id="wallet-add-btn">+1000</button>' +
+      '</div>' +
+      codeL('<div data-ai="wallet" data-size="medium" data-value="98765"></div>\n// JS API\nvar w = new AI.Wallet(el, { size: "medium", value: 98765 });\nw.setValue(100000);') +
+      apiT([
+        ['data-size', '尺寸：small/medium/large', 'string', "'medium'"],
+        ['data-value', '金额数值（number 自动千分位）', 'number|string', "'00,000'"],
+        ['thousandSeparator', '千分位分隔符，传 "" 关闭', 'string', "','" ],
+        ['AI.Wallet(el, {size, value, thousandSeparator, iconHTML})', 'JS API', 'function', '-'],
+        ['wallet.setValue(v) / getValue()', '更新/取值', 'method', '-']
+      ]) +
+    '</div>';
+  };
+
+  // -- Tooltip --
+  DEMOS.tooltip = function () {
+    var placements = ['top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left', 'left-start', 'left-end', 'right', 'right-start', 'right-end'];
+    var placementHTML = '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:600px;padding:32px 0">';
+    placements.forEach(function (p) {
+      placementHTML += '<div style="display:flex;justify-content:center;padding:24px 0">' +
+        '<span class="ai-tooltip-wrapper" data-ai="tooltip" data-title="位置：' + p + '" data-placement="' + p + '">' +
+          '<button class="ai-btn ai-btn--sm ai-btn--default">' + p + '</button>' +
+        '</span>' +
+      '</div>';
+    });
+    placementHTML += '</div>';
+    return '<div class="demo-section">' +
+      '<div class="demo-section-title">Tooltip <span class="demo-tag">12 placements</span></div>' +
+      '<div class="demo-label">trigger="hover"（默认）</div>' +
+      '<div class="demo-row" style="gap:24px">' +
+        '<span class="ai-tooltip-wrapper" data-ai="tooltip" data-title="上方提示" data-placement="top"><button class="ai-btn ai-btn--md ai-btn--primary">Hover Top</button></span>' +
+        '<span class="ai-tooltip-wrapper" data-ai="tooltip" data-title="下方提示" data-placement="bottom"><button class="ai-btn ai-btn--md ai-btn--primary">Hover Bottom</button></span>' +
+        '<span class="ai-tooltip-wrapper" data-ai="tooltip" data-title="左侧提示" data-placement="left"><button class="ai-btn ai-btn--md ai-btn--primary">Hover Left</button></span>' +
+        '<span class="ai-tooltip-wrapper" data-ai="tooltip" data-title="右侧提示" data-placement="right"><button class="ai-btn ai-btn--md ai-btn--primary">Hover Right</button></span>' +
+      '</div>' +
+      '<div class="demo-label">trigger="focus" / "click"</div>' +
+      '<div class="demo-row" style="gap:24px">' +
+        '<span class="ai-tooltip-wrapper" data-ai="tooltip" data-title="聚焦时显示" data-placement="top" data-trigger="focus"><button class="ai-btn ai-btn--md ai-btn--dashed">Focus Me</button></span>' +
+        '<span class="ai-tooltip-wrapper" data-ai="tooltip" data-title="点击切换显示" data-placement="top" data-trigger="click"><button class="ai-btn ai-btn--md ai-btn--dashed">Click Me</button></span>' +
+      '</div>' +
+      '<div class="demo-label">variant="island" 动森气泡</div>' +
+      '<div class="demo-row" style="gap:24px">' +
+        '<span class="ai-tooltip-wrapper" data-ai="tooltip" data-title="动森风格有机气泡" data-placement="top" data-variant="island"><button class="ai-btn ai-btn--md ai-btn--primary">Island Top</button></span>' +
+        '<span class="ai-tooltip-wrapper" data-ai="tooltip" data-title="动森风格，无边框" data-placement="bottom" data-variant="island" data-borderless="true"><button class="ai-btn ai-btn--md ai-btn--primary">Island Bottom</button></span>' +
+      '</div>' +
+      '<div class="demo-label">12 种 placement</div>' + placementHTML +
+      codeL('<span class="ai-tooltip-wrapper" data-ai="tooltip" data-title="提示文本" data-placement="top">\n  <button class="ai-btn ai-btn--primary">Hover Me</button>\n</span>') +
+      apiT([
+        ['data-title', '提示内容（支持 HTML）', 'string', '-'],
+        ['data-placement', '位置：top/top-start/top-end/bottom/... 12 种', 'string', "'top'"],
+        ['data-trigger', '触发：hover/focus/click', 'string', "'hover'"],
+        ['data-variant', '风格：default/island', 'string', "'default'"],
+        ['data-borderless', '无边框（"true" 启用）', 'string', '-'],
+        ['AI.Tooltip(el, {title, placement, trigger, variant, bordered})', 'JS API', 'function', '-']
+      ]) +
+    '</div>';
+  };
+
+  // -- BackTop --
+  DEMOS.backtop = function () {
+    return '<div class="demo-section">' +
+      '<div class="demo-section-title">BackTop <span class="demo-tag">返回顶部</span></div>' +
+      '<div class="demo-label">基础用法 — 滚动页面到 400px 后右下角会出现按钮（已激活）</div>' +
+      '<div data-ai="backtop"></div>' +
+      '<div class="demo-label">自定义 visibilityHeight 和 duration（JS API）</div>' +
+      '<div style="display:flex;gap:12px;align-items:center">' +
+        '<button class="ai-btn ai-btn--md ai-btn--primary" id="backtop-create-btn">创建一个 BackTop（200px 触发）</button>' +
+        '<button class="ai-btn ai-btn--md ai-btn--dashed" id="backtop-destroy-btn">销毁</button>' +
+      '</div>' +
+      '<div class="demo-label">提示：向下滚动当前页面即可看到右下角的返回顶部按钮</div>' +
+      '<div style="height:240px;background:linear-gradient(180deg,#f8f8f0,#e8dcc8);border-radius:14px;padding:16px;color:#725d42;margin-top:8px">向下滚动演示…</div>' +
+      codeL('<div data-ai="backtop"></div>\n// JS API\nvar bt = new AI.BackTop(null, {\n  visibilityHeight: 400,\n  duration: 300,\n  onClick: function () { console.log("clicked"); }\n});\nbt.destroy();') +
+      apiT([
+        ['data-ai="backtop"', '自动初始化', 'attribute', '-'],
+        ['visibilityHeight', '滚动多少 px 后显示', 'number', '400'],
+        ['duration', '滚动动画时长（ms）', 'number', '300'],
+        ['target', '滚动容器（返回 HTMLElement/Window 的函数）', 'function', 'window'],
+        ['imgSrc', '自定义图标 URL（默认 SVG 数据 URL）', 'string', '内置 SVG'],
+        ['AI.BackTop(el, {visibilityHeight, duration, target, onClick})', 'JS API', 'function', '-']
+      ]) +
+    '</div>';
+  };
+
+  // -- Drawer --
+  DEMOS.drawer = function () {
+    return '<div class="demo-section">' +
+      '<div class="demo-section-title">Drawer <span class="demo-tag">4 directions</span></div>' +
+      '<div class="demo-label">4 个方向 + 景深背景</div>' +
+      '<div class="demo-row">' +
+        '<button class="ai-btn ai-btn--md ai-btn--primary" id="drawer-right-btn">Right 右侧</button>' +
+        '<button class="ai-btn ai-btn--md ai-btn--primary" id="drawer-left-btn">Left 左侧</button>' +
+        '<button class="ai-btn ai-btn--md ai-btn--primary" id="drawer-top-btn">Top 顶部</button>' +
+        '<button class="ai-btn ai-btn--md ai-btn--primary" id="drawer-bottom-btn">Bottom 底部</button>' +
+      '</div>' +
+      '<div class="demo-label">不带景深（pushBackground=false）</div>' +
+      '<div class="demo-row">' +
+        '<button class="ai-btn ai-btn--md ai-btn--dashed" id="drawer-no-push-btn">无景深</button>' +
+      '</div>' +
+      '<div class="demo-label">inline 模式 — 在 HTML 中预声明抽屉</div>' +
+      '<button class="ai-btn ai-btn--md ai-btn--dashed" id="drawer-inline-trigger">打开 inline 抽屉</button>' +
+      '<div data-ai="drawer" data-placement="right" data-title="Inline 抽屉" data-trigger="#drawer-inline-trigger" style="display:none">这是 inline 模式的抽屉内容，可以从 HTML 中预声明。</div>' +
+      codeL('// JS API\nvar d = new AI.Drawer(null, {\n  placement: "right",\n  title: "标题",\n  body: "<p>内容</p>",\n  width: 378,\n  pushBackground: true,\n  onClose: function () { console.log("closed"); }\n});\nd.open();\nd.close();\n// inline 模式\n<div data-ai="drawer" data-placement="right" data-title="..." data-trigger="#trigger-btn">...</div>') +
+      apiT([
+        ['placement', '位置：left/right/top/bottom', 'string', "'right'"],
+        ['title', '标题', 'string', '-'],
+        ['width', '宽度（left/right）', 'number|string', '378'],
+        ['height', '高度（top/bottom）', 'number|string', '300'],
+        ['maskClosable', '点击遮罩关闭', 'boolean', 'true'],
+        ['pushBackground', '景深背景效果', 'boolean', 'true'],
+        ['footer', '底部区域', 'string', '-'],
+        ['AI.Drawer(el, {placement, title, body, footer, ...})', 'JS API', 'function', '-'],
+        ['drawer.open() / close()', '打开/关闭', 'method', '-']
+      ]) +
+    '</div>';
+  };
+
+  // -- Notification --
+  DEMOS.notification = function () {
+    return '<div class="demo-section">' +
+      '<div class="demo-section-title">Notification <span class="demo-tag">命令式 API</span></div>' +
+      '<div class="demo-label">4 种类型</div>' +
+      '<div class="demo-row">' +
+        '<button class="ai-btn ai-btn--md ai-btn--primary" id="notif-success-btn">Success</button>' +
+        '<button class="ai-btn ai-btn--md ai-btn--primary" id="notif-info-btn">Info</button>' +
+        '<button class="ai-btn ai-btn--md ai-btn--primary" id="notif-warning-btn">Warning</button>' +
+        '<button class="ai-btn ai-btn--md ai-btn--danger" id="notif-error-btn">Error</button>' +
+      '</div>' +
+      '<div class="demo-label">6 个位置</div>' +
+      '<div class="demo-row" style="flex-wrap:wrap;gap:8px">' +
+        '<button class="ai-btn ai-btn--sm ai-btn--dashed" data-notif-pos="topLeft">topLeft</button>' +
+        '<button class="ai-btn ai-btn--sm ai-btn--dashed" data-notif-pos="top">top</button>' +
+        '<button class="ai-btn ai-btn--sm ai-btn--dashed" data-notif-pos="topRight">topRight</button>' +
+        '<button class="ai-btn ai-btn--sm ai-btn--dashed" data-notif-pos="bottomLeft">bottomLeft</button>' +
+        '<button class="ai-btn ai-btn--sm ai-btn--dashed" data-notif-pos="bottom">bottom</button>' +
+        '<button class="ai-btn ai-btn--sm ai-btn--dashed" data-notif-pos="bottomRight">bottomRight</button>' +
+      '</div>' +
+      '<div class="demo-label">duration=0 不自动关闭 + 带描述</div>' +
+      '<div class="demo-row">' +
+        '<button class="ai-btn ai-btn--md ai-btn--dashed" id="notif-persistent-btn">常驻通知</button>' +
+        '<button class="ai-btn ai-btn--md ai-btn--text" id="notif-destroy-btn">关闭全部</button>' +
+      '</div>' +
+      codeL('// 命令式 API\nAI.Notification.success({ message: "成功", description: "操作已完成" });\nAI.Notification.info({ message: "提示", position: "topRight", duration: 5 });\nAI.Notification.error({ message: "失败", position: "bottomRight" });\nAI.Notification.destroy(); // 关闭全部') +
+      apiT([
+        ['message', '标题（必填）', 'string', '-'],
+        ['description', '描述正文', 'string', '-'],
+        ['type', '类型：success/info/warning/error', 'string', "'info'"],
+        ['position', '位置：top/topLeft/topRight/bottom/bottomLeft/bottomRight', 'string', "'top'"],
+        ['duration', '自动关闭延时（秒），0 不关闭', 'number', '4.5'],
+        ['key', '唯一 key（用于更新）', 'string', '自动生成'],
+        ['onClick', '点击回调', 'function', '-'],
+        ['onClose', '关闭回调', 'function', '-'],
+        ['AI.Notification.success/info/warning/error(cfg)', '静态方法', 'function', '-'],
+        ['AI.Notification.close(key) / destroy()', '关闭单条/全部', 'method', '-']
+      ]) +
+    '</div>';
+  };
+
+  // -- Form --
+  DEMOS.form = function () {
+    return '<div class="demo-section">' +
+      '<div class="demo-section-title">Form <span class="demo-tag">校验 + 提交</span></div>' +
+      '<div class="demo-label">基础表单 — 校验 + 提交</div>' +
+      '<form id="form-demo" data-layout="horizontal" style="max-width:520px">' +
+        '<div class="ai-form-item" data-name="username" data-rules=\'[{"required":true,"message":"用户名必填"},{"min":3,"message":"用户名至少 3 个字符"}]\'>' +
+          '<label class="ai-form-item__label ai-form-item__label--required">用户名</label>' +
+          '<div class="ai-form-item__control"><div class="ai-form-item__control-input"><input class="ai-input" style="width:100%" placeholder="请输入用户名"></div></div>' +
+        '</div>' +
+        '<div class="ai-form-item" data-name="email" data-rules=\'[{"required":true,"message":"邮箱必填"},{"type":"email","message":"邮箱格式不正确"}]\'>' +
+          '<label class="ai-form-item__label ai-form-item__label--required">邮箱</label>' +
+          '<div class="ai-form-item__control"><div class="ai-form-item__control-input"><input class="ai-input" style="width:100%" placeholder="example@island.com"></div></div>' +
+        '</div>' +
+        '<div class="ai-form-item" data-name="age" data-rules=\'[{"type":"integer","message":"必须是整数"},{"type":"integer","min":18,"message":"必须年满 18 岁"}]\'>' +
+          '<label class="ai-form-item__label">年龄</label>' +
+          '<div class="ai-form-item__control"><div class="ai-form-item__control-input"><input class="ai-input" style="width:100%" placeholder="可选"></div></div>' +
+        '</div>' +
+        '<div class="ai-form-item">' +
+          '<div class="ai-form-item__control"><div class="ai-form-item__control-input">' +
+            '<button type="submit" class="ai-btn ai-btn--md ai-btn--primary">提交</button>' +
+            '<button type="reset" class="ai-btn ai-btn--md ai-btn--default" style="margin-left:8px">重置</button>' +
+          '</div></div>' +
+        '</div>' +
+      '</form>' +
+      '<div class="demo-label">提交结果（看控制台）：</div>' +
+      '<div id="form-result" style="background:#2b2118;color:#e8d5bc;padding:12px 16px;border-radius:8px;font-family:monospace;font-size:13px;min-height:42px">提交后这里会显示结果</div>' +
+      codeL('<form data-ai="form" data-layout="horizontal">\n  <div class="ai-form-item" data-name="username" data-rules=\'[{"required":true,"message":"必填"}]\'>\n    <label class="ai-form-item__label">用户名</label>\n    <div class="ai-form-item__control"><div class="ai-form-item__control-input">\n      <input class="ai-input">\n    </div></div>\n  </div>\n</form>\nvar form = new AI.Form(el, {\n  onFinish: function (vals) { console.log(vals); },\n  onFinishFailed: function (info) { console.log(info.errorFields); }\n});\nform.submit(); form.validateFields(); form.resetFields();') +
+      apiT([
+        ['data-layout', '布局：horizontal/vertical/inline', 'string', "'horizontal'"],
+        ['data-name', '字段名（在 .ai-form-item 上）', 'string', '-'],
+        ['data-rules', '校验规则（JSON）', 'string', '-'],
+        ['rules', '校验规则数组（JS 模式）', 'Array', '-'],
+        ['initialValues', '初始值（JS 模式）', 'object', '-'],
+        ['onFinish(values)', '校验通过回调', 'function', '-'],
+        ['onFinishFailed(info)', '校验失败回调', 'function', '-'],
+        ['onValuesChange(changed, all)', '值变化回调', 'function', '-'],
+        ['AI.Form(el, {layout, onFinish, ...})', 'JS API', 'function', '-'],
+        ['form.validateFields() / submit() / resetFields()', '校验/提交/重置', 'method', '-'],
+        ['form.getFieldValue / setFieldValue / getFieldsValue', '取/设值', 'method', '-']
+      ]) +
+    '</div>';
+  };
+
   /* ==============================
      Component page
      ============================== */
@@ -1111,6 +1545,187 @@
           var labelEl = document.getElementById('tabs-controlled-label');
           if (labelEl && e.detail && e.detail.key) {
             labelEl.textContent = labelMap[e.detail.key] || e.detail.key;
+          }
+        });
+      }
+    }
+
+    // Progress dynamic update
+    if (key === 'progress') {
+      var progressDynamic = document.getElementById('progress-dynamic');
+      var progressInstance = null;
+      // Re-init to get instance reference
+      if (progressDynamic) {
+        progressInstance = new AI.Progress(progressDynamic, {
+          percent: parseInt(progressDynamic.getAttribute('data-percent') || '30', 10),
+          size: progressDynamic.getAttribute('data-size') || 'middle'
+        });
+      }
+      var progressAddBtn = document.getElementById('progress-add-btn');
+      if (progressAddBtn && progressInstance) {
+        progressAddBtn.addEventListener('click', function () {
+          var next = (progressInstance.getPercent() + 5) % 105;
+          progressInstance.setPercent(next);
+        });
+      }
+    }
+
+    // Title JS API
+    if (key === 'title') {
+      var titleMount = document.getElementById('title-js-mount');
+      if (titleMount) {
+        var titleEl = new AI.Title({ size: 'large', color: 'app-teal', text: '动森标题' });
+        titleMount.appendChild(titleEl);
+      }
+    }
+
+    // Radio JS API (controlled)
+    if (key === 'radio') {
+      var radioMount = document.getElementById('radio-js-mount');
+      if (radioMount) {
+        var radioInst = new AI.Radio(radioMount, {
+          size: 'middle',
+          value: 'apple',
+          options: [
+            { label: '苹果', value: 'apple' },
+            { label: '橘子', value: 'orange' },
+            { label: '樱桃', value: 'cherry' }
+          ],
+          onChange: function (v) {
+            var valEl = document.getElementById('radio-js-value');
+            if (valEl) valEl.textContent = v;
+          }
+        });
+      }
+    }
+
+    // Wallet dynamic update
+    if (key === 'wallet') {
+      var walletDynamic = document.getElementById('wallet-dynamic');
+      var walletInstance = null;
+      if (walletDynamic) {
+        walletInstance = new AI.Wallet(walletDynamic, {
+          size: walletDynamic.getAttribute('data-size') || 'medium',
+          value: parseInt(walletDynamic.getAttribute('data-value') || '500', 10)
+        });
+      }
+      var walletAddBtn = document.getElementById('wallet-add-btn');
+      if (walletAddBtn && walletInstance) {
+        walletAddBtn.addEventListener('click', function () {
+          var cur = typeof walletInstance.getValue() === 'number'
+            ? walletInstance.getValue()
+            : parseInt(walletInstance.getValue(), 10) || 0;
+          walletInstance.setValue(cur + 1000);
+        });
+      }
+    }
+
+    // BackTop create/destroy
+    if (key === 'backtop') {
+      var backtopCreateBtn = document.getElementById('backtop-create-btn');
+      var backtopDestroyBtn = document.getElementById('backtop-destroy-btn');
+      var backtopInstance = null;
+      if (backtopCreateBtn) backtopCreateBtn.addEventListener('click', function () {
+        if (backtopInstance) return;
+        backtopInstance = new AI.BackTop(null, {
+          visibilityHeight: 200,
+          duration: 300,
+          onClick: function () { /* default scroll-to-top */ }
+        });
+        backtopCreateBtn.textContent = '已创建（200px 触发）';
+      });
+      if (backtopDestroyBtn) backtopDestroyBtn.addEventListener('click', function () {
+        if (backtopInstance) {
+          backtopInstance.destroy();
+          backtopInstance = null;
+          backtopCreateBtn.textContent = '创建一个 BackTop（200px 触发）';
+        }
+      });
+      cleanups.push(function () {
+        if (backtopInstance) { backtopInstance.destroy(); backtopInstance = null; }
+      });
+    }
+
+    // Drawer open/close
+    if (key === 'drawer') {
+      var openDrawer = function (cfg) {
+        new AI.Drawer(null, cfg).open();
+      };
+      var dr = document.getElementById('drawer-right-btn');
+      if (dr) dr.addEventListener('click', function () {
+        openDrawer({ placement: 'right', title: '右侧抽屉', body: '<p style="padding:8px 0">这是从右侧滑出的抽屉，带有景深背景效果。</p>', width: 378 });
+      });
+      var dl = document.getElementById('drawer-left-btn');
+      if (dl) dl.addEventListener('click', function () {
+        openDrawer({ placement: 'left', title: '左侧抽屉', body: '<p style="padding:8px 0">这是从左侧滑出的抽屉。</p>', width: 378 });
+      });
+      var dt = document.getElementById('drawer-top-btn');
+      if (dt) dt.addEventListener('click', function () {
+        openDrawer({ placement: 'top', title: '顶部抽屉', body: '<p style="padding:8px 0">这是从顶部滑出的抽屉。</p>', height: 260 });
+      });
+      var db = document.getElementById('drawer-bottom-btn');
+      if (db) db.addEventListener('click', function () {
+        openDrawer({ placement: 'bottom', title: '底部抽屉', body: '<p style="padding:8px 0">这是从底部滑出的抽屉。</p>', height: 260 });
+      });
+      var dnp = document.getElementById('drawer-no-push-btn');
+      if (dnp) dnp.addEventListener('click', function () {
+        openDrawer({ placement: 'right', title: '无景深抽屉', body: '<p style="padding:8px 0">这个抽屉关闭了 pushBackground，背景不产生景深效果。</p>', width: 378, pushBackground: false });
+      });
+    }
+
+    // Notification buttons
+    if (key === 'notification') {
+      var ns = document.getElementById('notif-success-btn');
+      if (ns) ns.addEventListener('click', function () {
+        AI.Notification.success({ message: '操作成功', description: '数据已保存到岛屿档案馆', position: 'top' });
+      });
+      var ni = document.getElementById('notif-info-btn');
+      if (ni) ni.addEventListener('click', function () {
+        AI.Notification.info({ message: '提示信息', description: '今天有新的访客到来', position: 'top' });
+      });
+      var nw = document.getElementById('notif-warning-btn');
+      if (nw) nw.addEventListener('click', function () {
+        AI.Notification.warning({ message: '注意', description: '背包快满了，请整理一下', position: 'top' });
+      });
+      var ne = document.getElementById('notif-error-btn');
+      if (ne) ne.addEventListener('click', function () {
+        AI.Notification.error({ message: '操作失败', description: '网络连接异常，请重试', position: 'top' });
+      });
+      document.querySelectorAll('[data-notif-pos]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var pos = btn.getAttribute('data-notif-pos');
+          AI.Notification.info({ message: '位置：' + pos, description: '这条通知出现在 ' + pos + ' 位置', position: pos, duration: 3 });
+        });
+      });
+      var np = document.getElementById('notif-persistent-btn');
+      if (np) np.addEventListener('click', function () {
+        AI.Notification.open({
+          type: 'info',
+          message: '常驻通知',
+          description: 'duration=0，不会自动关闭。请点击右上角 × 关闭。',
+          position: 'topRight',
+          duration: 0
+        });
+      });
+      var nd = document.getElementById('notif-destroy-btn');
+      if (nd) nd.addEventListener('click', function () {
+        AI.Notification.destroy();
+      });
+    }
+
+    // Form submission
+    if (key === 'form') {
+      var formEl = document.getElementById('form-demo');
+      var formResult = document.getElementById('form-result');
+      if (formEl && formResult) {
+        var formInst = new AI.Form(formEl, {
+          onFinish: function (vals) {
+            formResult.textContent = '✓ 校验通过，提交值：' + JSON.stringify(vals, null, 2);
+          },
+          onFinishFailed: function (info) {
+            formResult.textContent = '✗ 校验失败，错误字段：' + info.errorFields.map(function (f) {
+              return f.name + ' (' + f.errors.join('; ') + ')';
+            }).join(' | ');
           }
         });
       }

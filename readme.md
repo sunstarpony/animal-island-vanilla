@@ -11,3 +11,5 @@
 使用GLM5.1进行了优化与bug修复，所有代码已人工审查，个人项目，不足之请谅解
 
 感谢原项目作者 guokaigdg 提供的优秀设计
+
+Sam-dancing-nu1提供的star

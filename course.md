@@ -28,6 +28,32 @@
    - [Tabs 选项卡](#517-tabs-选项卡)
    - [Time 实时时钟](#518-time-实时时钟)
    - [Typewriter 打字机](#519-typewriter-打字机)
+   - [Tag 标签](#520-tag-标签)
+   - [Title 标题](#521-title-标题)
+   - [Skeleton 骨架屏](#522-skeleton-骨架屏)
+   - [Progress 进度条](#523-progress-进度条)
+   - [Radio 单选框](#524-radio-单选框)
+   - [Wallet 钱包](#525-wallet-钱包)
+   - [Tooltip 工具提示](#526-tooltip-工具提示)
+   - [BackTop 返回顶部](#527-backtop-返回顶部)
+   - [Drawer 抽屉](#528-drawer-抽屉)
+   - [Notification 通知](#529-notification-通知)
+   - [Form 表单](#530-form-表单)
+   - [Avatar 头像](#531-avatar-头像)
+   - [Badge 徽标数](#532-badge-徽标数)
+   - [NoData 空状态](#533-nodata-空状态)
+   - [Rate 评分](#534-rate-评分)
+   - [Pagination 分页](#535-pagination-分页)
+   - [Image 图片](#536-image-图片)
+   - [Carousel 轮播图](#537-carousel-轮播图)
+   - [Countdown 倒计时](#538-countdown-倒计时)
+   - [CountUp 数字滚动](#539-countup-数字滚动)
+   - [Background 装饰背景](#540-background-装饰背景)
+   - [Upload 上传](#541-upload-上传)
+   - [DatePicker 日期选择](#542-datepicker-日期选择)
+   - [TimePicker 时间选择](#543-timepicker-时间选择)
+   - [Calendar 日历](#544-calendar-日历)
+   - [Chart 图表](#545-chart-图表)
 6. [自动初始化](#6-自动初始化)
 7. [JavaScript API 总览](#7-javascript-api-总览)
 8. [自定义主题](#8-自定义主题)
@@ -49,6 +75,7 @@ your-project/
 ├── js/
 │   └── animal-island.js
 └── assets/
+    ├── fonts/          # 内置 woff2 字体（Nunito + Noto Sans SC）
     └── img/
         ├── cursor/
         ├── dividers/
@@ -68,12 +95,7 @@ your-project/
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My App</title>
 
-  <!-- Google Fonts（推荐） -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&display=swap" rel="stylesheet">
-
-  <!-- 核心样式 -->
+  <!-- 核心样式（已内置 @font-face 字体声明，无需额外加载 Google Fonts） -->
   <link rel="stylesheet" href="css/animal-island.css">
 </head>
 <body>
@@ -100,11 +122,12 @@ your-project/
 
 | 文件 | 说明 | 是否必须 |
 |------|------|----------|
-| `css/animal-island.css` | 核心样式文件，包含所有组件和设计令牌 | **必须** |
+| `css/animal-island.css` | 核心样式文件，包含所有组件、设计令牌和 @font-face 字体声明 | **必须** |
 | `js/animal-island.js` | 核心脚本，包含所有交互逻辑和自动初始化 | **必须** |
-| `assets/` | 图片资源（图标、光标、分割线、页脚等） | 使用对应组件时需要 |
+| `assets/fonts/` | 内置 woff2 字体文件（Nunito + Noto Sans SC，9 个字重） | **必须** |
+| `assets/img/` | 图片资源（图标、光标、分割线、页脚等） | 使用对应组件时需要 |
 
-> **提示**：所有组件均为零外部依赖，无需额外加载任何第三方库。
+> **提示**：所有组件均为零外部依赖，字体已本地打包，无需联网加载 Google Fonts，完全离线可用。
 
 ---
 
@@ -146,9 +169,8 @@ your-project/
   --ai-bg-secondary: #f0e8d8;
   --ai-bg-disabled: #f0ece2;
 
-  /* 字体 */
-  --ai-font-family: Nunito, 'Noto Sans SC', 'Zen Maru Gothic',
-    'HarmonyOS Sans SC', 'MiSans',
+  /* 字体（已通过 @font-face 本地打包 Nunito + Noto Sans SC） */
+  --ai-font-family: Nunito, 'Noto Sans SC',
     -apple-system, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
     sans-serif;
   --ai-font-size-sm: 12px;
@@ -212,6 +234,32 @@ your-project/
 | Tabs | | ✓ | `data-ai="tabs"` |
 | Time | | ✓ | `data-ai="time"` |
 | Typewriter | | ✓ | 手动调用 |
+| Tag | ✓ | ✓ | `data-ai="tag"`（关闭/点击需 JS） |
+| Title | ✓ | ✓ | 手动调用（JS 工厂方法） |
+| Skeleton | | ✓ | `data-ai="skeleton"` |
+| Progress | | ✓ | `data-ai="progress"` |
+| Radio | | ✓ | `data-ai="radio"` |
+| Wallet | | ✓ | `data-ai="wallet"` |
+| Tooltip | | ✓ | `data-ai="tooltip"` |
+| BackTop | | ✓ | `data-ai="backtop"` |
+| Drawer | | ✓ | `data-ai="drawer"`（inline 模式）/ 手动调用 |
+| Notification | | ✓ | 命令式 API（`AI.Notification.xxx()`） |
+| Form | | ✓ | `data-ai="form"` |
+| Avatar | | ✓ | `data-ai="avatar"` / `data-ai="avatar-group"` |
+| Badge | | ✓ | `data-ai="badge"` |
+| NoData | | ✓ | `data-ai="no-data"` |
+| Rate | | ✓ | `data-ai="rate"` |
+| Pagination | | ✓ | `data-ai="pagination"` |
+| Image | | ✓ | `data-ai="image"` |
+| Carousel | | ✓ | `data-ai="carousel"`（items 需 JSON） |
+| Countdown | | ✓ | `data-ai="countdown"` |
+| CountUp | | ✓ | `data-ai="countup"` |
+| Background | ✓ | ✓ | `data-ai="background"`（仅追加装饰 class） |
+| Upload | | ✓ | `data-ai="upload"` |
+| DatePicker | | ✓ | `data-ai="datepicker"` |
+| TimePicker | | ✓ | `data-ai="timepicker"` |
+| Calendar | | ✓ | `data-ai="calendar"` |
+| Chart | | ✓ | `data-ai="chart"`（`data-options` 传 JSON） |
 
 ---
 
@@ -1277,6 +1325,1153 @@ tw.destroy();
 
 ---
 
+### 5.20 Tag 标签
+
+支持纯 CSS 使用（展示型），关闭/点击交互需 JS 初始化。
+
+#### 变体（variant）
+
+4 种变体可与 12 种配色组合：
+
+```html
+<!-- solid 实心 -->
+<span class="ai-tag ai-tag--md ai-tag--solid ai-tag--app-teal">
+  <span class="ai-tag__text">标签</span>
+</span>
+
+<!-- outlined 描边 -->
+<span class="ai-tag ai-tag--md ai-tag--outlined ai-tag--app-pink">
+  <span class="ai-tag__text">标签</span>
+</span>
+
+<!-- dashed 虚线 -->
+<span class="ai-tag ai-tag--md ai-tag--dashed ai-tag--app-blue">
+  <span class="ai-tag__text">标签</span>
+</span>
+
+<!-- soft 柔和 -->
+<span class="ai-tag ai-tag--md ai-tag--soft ai-tag--app-yellow">
+  <span class="ai-tag__text">标签</span>
+</span>
+```
+
+#### 配色
+
+12 种：`app-pink` / `purple` / `app-blue` / `app-yellow` / `app-orange` / `app-teal` / `app-green` / `app-red` / `lime-green` / `yellow-green` / `brown` / `warm-peach-pink`。不写配色即为 `default`。
+
+#### 尺寸
+
+```html
+<span class="ai-tag ai-tag--sm ai-tag--solid ai-tag--app-teal"><span class="ai-tag__text">Small</span></span>
+<span class="ai-tag ai-tag--md ai-tag--solid ai-tag--app-teal"><span class="ai-tag__text">Medium</span></span>
+<span class="ai-tag ai-tag--lg ai-tag--solid ai-tag--app-teal"><span class="ai-tag__text">Large</span></span>
+```
+
+#### 可关闭
+
+```html
+<span class="ai-tag ai-tag--md ai-tag--soft ai-tag--app-pink" data-ai="tag">
+  <span class="ai-tag__text">可关闭</span>
+  <button class="ai-tag__close" aria-label="close">×</button>
+</span>
+```
+
+#### 可点击 / 禁用
+
+```html
+<!-- 可点击（含键盘支持，需 tabindex="0"） -->
+<span class="ai-tag ai-tag--md ai-tag--solid ai-tag--app-green ai-tag--clickable" data-ai="tag" tabindex="0">
+  <span class="ai-tag__text">点我</span>
+</span>
+
+<!-- 禁用 -->
+<span class="ai-tag ai-tag--md ai-tag--solid ai-tag--brown ai-tag--disabled" data-ai="tag">
+  <span class="ai-tag__text">禁用</span>
+</span>
+```
+
+#### JS API
+
+```javascript
+var tag = new AnimalIsland.Tag(el, {
+  onClose: function () { console.log('关闭'); },
+  onClick: function () { console.log('点击'); }
+});
+```
+
+---
+
+### 5.21 Title 标题
+
+动森风格 3D 立体缎带标题，纯 CSS 即可使用，也提供 JS 工厂方法。
+
+#### 纯 CSS 用法
+
+```html
+<span class="ai-title ai-title--lg ai-title--app-teal">
+  <span class="ai-title__ribbon">
+    <span class="ai-title__back ai-title__back--left" aria-hidden="true"></span>
+    <span class="ai-title__back ai-title__back--right" aria-hidden="true"></span>
+    <span class="ai-title__fold ai-title__fold--left" aria-hidden="true"></span>
+    <span class="ai-title__fold ai-title__fold--right" aria-hidden="true"></span>
+    <span class="ai-title__front" aria-hidden="true"></span>
+    <span class="ai-title__text">动森标题</span>
+  </span>
+</span>
+```
+
+#### 尺寸与配色
+
+- 尺寸：`ai-title--sm` / `ai-title--md` / `ai-title--lg`
+- 配色：12 种（同 Tag），不写为 `default`
+
+#### JS 工厂方法
+
+```javascript
+// 返回一个 DOM 元素，可自行 appendChild
+var titleEl = new AnimalIsland.Title({
+  size: 'large',        // 'small' | 'middle' | 'large'
+  color: 'app-teal',    // 12 种配色或 'default'
+  text: '动森标题'       // 文本（支持 HTML）
+});
+document.body.appendChild(titleEl);
+
+// 更新文本
+titleEl.setText('新标题');
+```
+
+---
+
+### 5.22 Skeleton 骨架屏
+
+需要 JS 初始化，支持自动初始化。提供 shimmer 动画。
+
+#### 变体
+
+```html
+<!-- text 文本骨架 -->
+<div data-ai="skeleton" data-variant="text" data-width="100%"></div>
+
+<!-- circle 圆形骨架 -->
+<div data-ai="skeleton" data-variant="circle" data-width-value="44" data-height-value="44"></div>
+
+<!-- rect 矩形骨架 -->
+<div data-ai="skeleton" data-variant="rect" data-width-value="100%" data-height-value="120"></div>
+
+<!-- paragraph 段落骨架 -->
+<div data-ai="skeleton" data-variant="paragraph" data-rows="4"></div>
+
+<!-- 关闭动画 -->
+<div data-ai="skeleton" data-variant="text" data-active="false" data-width="60%"></div>
+```
+
+#### 属性
+
+| 属性 | 说明 | 默认值 |
+|------|------|--------|
+| `data-variant` | `text`/`circle`/`rect`/`paragraph` | `text` |
+| `data-active` | 是否启用 shimmer 动画 `'true'`/`'false'` | `'true'` |
+| `data-rows` | 行数（paragraph 模式） | `3` |
+| `data-width` | 宽度（text 模式） | `'100%'` |
+| `data-width-value` | 宽度值（circle/rect） | - |
+| `data-height-value` | 高度值 | - |
+
+#### JS API
+
+```javascript
+var sk = new AnimalIsland.Skeleton(el, {
+  variant: 'paragraph',
+  active: true,
+  rows: 4,
+  rowWidths: ['100%', '92%', '84%', '76%']
+});
+
+// 切换动画
+sk.setActive(false);
+```
+
+---
+
+### 5.23 Progress 进度条
+
+需要 JS 初始化，支持自动初始化。可动态更新百分比。
+
+```html
+<!-- inside（默认，信息在进度条内） -->
+<div data-ai="progress" data-percent="55" data-size="middle"></div>
+
+<!-- right（信息在右侧） -->
+<div data-ai="progress" data-percent="42" data-info-position="right"></div>
+
+<!-- top（信息在上方） -->
+<div data-ai="progress" data-percent="68" data-info-position="top"></div>
+```
+
+#### 属性
+
+| 属性 | 说明 | 默认值 |
+|------|------|--------|
+| `data-percent` | 百分比 0-100 | `0` |
+| `data-size` | `small`/`middle`/`large` | `middle` |
+| `data-info-position` | `inside`/`right`/`top` | `inside` |
+| `data-show-info` | 是否显示信息 `'true'`/`'false'` | `'true'` |
+
+#### JS API
+
+```javascript
+var p = new AnimalIsland.Progress(el, {
+  percent: 60,
+  size: 'middle',
+  infoPosition: 'inside',
+  duration: 0.6,                    // 过渡时长（秒）
+  infoFormat: function (p) {        // 自定义信息文案
+    return p + '% 完成';
+  }
+});
+
+// 动态更新
+p.setPercent(80);
+p.getPercent();  // 80
+```
+
+---
+
+### 5.24 Radio 单选框
+
+需要 JS 初始化，支持自动初始化。支持键盘导航（方向键/Home/End）。
+
+```html
+<div data-ai="radio"
+     data-size="middle"
+     data-value="apple"
+     data-options='[{"label":"苹果","value":"apple"},{"label":"橘子","value":"orange"},{"label":"樱桃","value":"cherry"}]'>
+</div>
+
+<!-- 垂直布局 -->
+<div data-ai="radio"
+     data-size="middle"
+     data-direction="vertical"
+     data-value="orange"
+     data-options='[{"label":"苹果","value":"apple"},{"label":"橘子","value":"orange"}]'>
+</div>
+
+<!-- 禁用 -->
+<div data-ai="radio"
+     data-size="middle"
+     data-disabled="true"
+     data-value="apple"
+     data-options='[{"label":"苹果","value":"apple"}]'>
+</div>
+```
+
+#### 属性
+
+| 属性 | 说明 | 默认值 |
+|------|------|--------|
+| `data-size` | `small`/`middle`/`large` | `middle` |
+| `data-direction` | `horizontal`/`vertical` | `horizontal` |
+| `data-value` | 当前选中值 | - |
+| `data-options` | 选项数组（JSON） | - |
+| `data-disabled` | 禁用全部 `'true'`/`'false'` | `'false'` |
+
+#### JS API
+
+```javascript
+var r = new AnimalIsland.Radio(el, {
+  size: 'middle',
+  value: 'apple',
+  options: [
+    { label: '苹果', value: 'apple' },
+    { label: '橘子', value: 'orange', disabled: false }
+  ],
+  onChange: function (value) {
+    console.log('选中:', value);
+  }
+});
+
+r.getValue();          // 'apple'
+r.setValue('orange');
+r.disable();           // 禁用全部
+r.enable();
+```
+
+#### 键盘导航
+
+- `←`/`↑`：上一个选项
+- `→`/`↓`：下一个选项
+- `Home`：第一个选项
+- `End`：最后一个选项
+
+---
+
+### 5.25 Wallet 钱包
+
+动森风格钱包组件，支持千分位格式化和动态更新。
+
+```html
+<div data-ai="wallet" data-size="medium" data-value="98765"></div>
+
+<!-- 字符串值（不格式化） -->
+<div data-ai="wallet" data-value="LOTS"></div>
+```
+
+#### 属性
+
+| 属性 | 说明 | 默认值 |
+|------|------|--------|
+| `data-size` | `small`/`medium`/`large` | `medium` |
+| `data-value` | 金额（number 自动千分位） | `'00,000'` |
+
+#### JS API
+
+```javascript
+var w = new AnimalIsland.Wallet(el, {
+  size: 'medium',
+  value: 98765,
+  thousandSeparator: ',',     // 传 '' 关闭千分位
+  iconHTML: '<img src="...">'  // 自定义图标
+});
+
+w.setValue(100000);
+w.getValue();   // 100000
+```
+
+---
+
+### 5.26 Tooltip 工具提示
+
+需要 JS 初始化，支持自动初始化。12 种位置、3 种触发方式。
+
+```html
+<!-- hover（默认） -->
+<span class="ai-tooltip-wrapper" data-ai="tooltip" data-title="提示文本" data-placement="top">
+  <button class="ai-btn ai-btn--primary">Hover Me</button>
+</span>
+
+<!-- focus 聚焦触发 -->
+<span class="ai-tooltip-wrapper" data-ai="tooltip" data-title="提示" data-placement="top" data-trigger="focus">
+  <button class="ai-btn">Focus Me</button>
+</span>
+
+<!-- click 点击触发 -->
+<span class="ai-tooltip-wrapper" data-ai="tooltip" data-title="提示" data-placement="top" data-trigger="click">
+  <button class="ai-btn">Click Me</button>
+</span>
+
+<!-- island 动森气泡风格 -->
+<span class="ai-tooltip-wrapper" data-ai="tooltip" data-title="动森气泡" data-placement="top" data-variant="island">
+  <button class="ai-btn">Island</button>
+</span>
+```
+
+#### 属性
+
+| 属性 | 说明 | 默认值 |
+|------|------|--------|
+| `data-title` | 提示内容（支持 HTML） | - |
+| `data-placement` | 位置（12 种，见下） | `top` |
+| `data-trigger` | `hover`/`focus`/`click` | `hover` |
+| `data-variant` | `default`/`island` | `default` |
+| `data-borderless` | 无边框 `'true'` | - |
+
+#### 12 种 placement
+
+`top` / `top-start` / `top-end` / `bottom` / `bottom-start` / `bottom-end` / `left` / `left-start` / `left-end` / `right` / `right-start` / `right-end`
+
+#### JS API
+
+```javascript
+var tip = new AnimalIsland.Tooltip(el, {
+  title: '提示文本',
+  placement: 'top',
+  trigger: 'hover',
+  variant: 'default',
+  bordered: true
+});
+```
+
+---
+
+### 5.27 BackTop 返回顶部
+
+需要 JS 初始化，支持自动初始化。滚动超过阈值后显示按钮，点击平滑回到顶部。
+
+```html
+<!-- 自动初始化（使用默认配置） -->
+<div data-ai="backtop"></div>
+```
+
+#### JS API（自定义配置）
+
+```javascript
+var bt = new AnimalIsland.BackTop(null, {
+  visibilityHeight: 400,    // 滚动多少 px 后显示，默认 400
+  duration: 300,            // 滚动动画时长（ms），默认 300
+  target: function () {     // 滚动容器，默认 window
+    return document.getElementById('scroll-container');
+  },
+  imgSrc: 'path/to/icon.svg',  // 自定义图标（默认内置 SVG）
+  onClick: function () {
+    console.log('点击返回顶部');
+  }
+});
+
+// 销毁
+bt.destroy();
+```
+
+---
+
+### 5.28 Drawer 抽屉
+
+需要 JS 初始化。支持左/右/上/下四个方向、景深背景、遮罩关闭、ESC 关闭、焦点陷阱。
+
+#### JS API（命令式）
+
+```javascript
+var d = new AnimalIsland.Drawer(null, {
+  placement: 'right',          // 'left'/'right'/'top'/'bottom'
+  title: '抽屉标题',
+  body: '<p>抽屉内容</p>',
+  width: 378,                  // left/right 宽度
+  height: 300,                 // top/bottom 高度
+  maskClosable: true,          // 点击遮罩关闭
+  pushBackground: true,        // 景深背景效果
+  footer: '<button>确定</button>',
+  onClose: function () {
+    console.log('关闭');
+  }
+});
+
+d.open();
+d.close();
+```
+
+#### inline 模式（在 HTML 中预声明）
+
+```html
+<button id="my-trigger">打开抽屉</button>
+
+<div data-ai="drawer"
+     data-placement="right"
+     data-title="Inline 抽屉"
+     data-trigger="#my-trigger"
+     style="display:none">
+  这是 inline 模式的抽屉内容。
+</div>
+```
+
+#### 配置项
+
+| 参数 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `placement` | string | `'right'` | 位置 |
+| `title` | string | - | 标题 |
+| `body` | string | - | 内容 HTML |
+| `width` | number/string | `378` | 宽度（left/right） |
+| `height` | number/string | `300` | 高度（top/bottom） |
+| `maskClosable` | boolean | `true` | 点击遮罩关闭 |
+| `pushBackground` | boolean | `true` | 景深背景 |
+| `footer` | string | - | 底部区域 |
+
+---
+
+### 5.29 Notification 通知
+
+命令式 API，无需初始化。4 种类型、6 个位置、自动关闭。
+
+```javascript
+// 4 种类型
+AnimalIsland.Notification.success({ message: '操作成功', description: '数据已保存' });
+AnimalIsland.Notification.info({ message: '提示', description: '今天有新访客' });
+AnimalIsland.Notification.warning({ message: '注意', description: '背包快满了' });
+AnimalIsland.Notification.error({ message: '失败', description: '网络异常' });
+
+// 指定位置
+AnimalIsland.Notification.info({
+  message: '标题',
+  position: 'topRight',    // top/topLeft/topRight/bottom/bottomLeft/bottomRight
+  duration: 5              // 自动关闭延时（秒），0 表示不关闭
+});
+
+// 常驻通知（不自动关闭）
+AnimalIsland.Notification.open({
+  type: 'info',
+  message: '常驻通知',
+  description: '不会自动关闭，请手动点击 × 关闭',
+  duration: 0
+});
+
+// 关闭单条（需指定 key）
+var key = AnimalIsland.Notification.info({ message: '可关闭' });
+AnimalIsland.Notification.close(key);
+
+// 关闭全部
+AnimalIsland.Notification.destroy();
+```
+
+#### 配置项
+
+| 参数 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `message` | string | - | 标题（必填） |
+| `description` | string | - | 描述正文 |
+| `type` | string | `'info'` | `success`/`info`/`warning`/`error` |
+| `position` | string | `'top'` | 6 个位置 |
+| `duration` | number | `4.5` | 自动关闭延时（秒），0 不关闭 |
+| `key` | string | 自动生成 | 唯一标识，用于更新/关闭 |
+| `onClick` | function | - | 点击回调 |
+| `onClose` | function | - | 关闭回调 |
+
+---
+
+### 5.30 Form 表单
+
+需要 JS 初始化，支持自动初始化。提供字段管理、规则校验、提交/重置。
+
+#### 基础用法（data 属性 + 自动初始化）
+
+```html
+<form data-ai="form" data-layout="horizontal">
+  <div class="ai-form-item"
+       data-name="username"
+       data-rules='[{"required":true,"message":"用户名必填"},{"min":3,"message":"至少 3 个字符"}]'>
+    <label class="ai-form-item__label ai-form-item__label--required">用户名</label>
+    <div class="ai-form-item__control">
+      <div class="ai-form-item__control-input">
+        <input class="ai-input" placeholder="请输入用户名">
+      </div>
+    </div>
+  </div>
+
+  <div class="ai-form-item">
+    <div class="ai-form-item__control">
+      <div class="ai-form-item__control-input">
+        <button type="submit" class="ai-btn ai-btn--primary">提交</button>
+        <button type="reset" class="ai-btn ai-btn--default">重置</button>
+      </div>
+    </div>
+  </div>
+</form>
+```
+
+#### JS API（带回调）
+
+```javascript
+var form = new AnimalIsland.Form(el, {
+  layout: 'horizontal',          // 'horizontal'/'vertical'/'inline'
+  size: 'middle',                // 'small'/'middle'/'large'
+  initialValues: { username: '默认值' },
+  onFinish: function (values) {
+    console.log('校验通过，提交值:', values);
+  },
+  onFinishFailed: function (info) {
+    console.log('校验失败:', info.errorFields);
+  },
+  onValuesChange: function (changed, allValues) {
+    console.log('值变化:', changed, allValues);
+  },
+  onReset: function () {
+    console.log('已重置');
+  }
+});
+```
+
+#### 校验规则
+
+通过 `data-rules`（JSON 数组）配置，支持的规则：
+
+| 规则 | 说明 |
+|------|------|
+| `required` | 是否必填 |
+| `type` | 类型：`email`/`url`/`number`/`integer`/`float`/`boolean`/`array`/`date`/`string` |
+| `min` | 最小值/最小长度 |
+| `max` | 最大值/最大长度 |
+| `len` | 固定长度 |
+| `pattern` | 正则校验 |
+| `validator` | 自定义校验函数 `(rule, value) => string\|null\|Promise` |
+| `message` | 错误提示文案 |
+
+```html
+<div class="ai-form-item"
+     data-name="email"
+     data-rules='[{"required":true,"message":"邮箱必填"},{"type":"email","message":"邮箱格式不正确"}]'>
+  ...
+</div>
+```
+
+#### 实例方法
+
+```javascript
+form.submit();                  // 触发提交（先校验）
+form.validateFields();          // 校验全部字段，返回 Promise
+form.validateFields(['name']);  // 校验指定字段
+form.resetFields();             // 重置全部字段
+form.getFieldValue('name');     // 取值
+form.setFieldValue('name', v);  // 设值
+form.getFieldsValue();          // 取全部值
+form.setFieldsValue({ a: 1 });  // 批量设值
+form.getFieldError('name');     // 取字段错误
+form.isFieldTouched('name');    // 字段是否被触碰过
+form.scrollToField('name');     // 滚动到字段
+```
+
+#### 布局
+
+| `data-layout` | 说明 |
+|---------------|------|
+| `horizontal` | 标签在左，控件在右（默认） |
+| `vertical` | 标签在上，控件在下 |
+| `inline` | 行内布局 |
+
+### 5.31 Avatar 头像
+
+需要 JS 初始化，支持自动初始化。
+
+#### 基本用法
+
+```html
+<!-- 文字头像 -->
+<div data-ai="avatar" data-text="阿獭" data-size="large"></div>
+
+<!-- 方形头像 + 自定义图片 -->
+<div data-ai="avatar" data-shape="square" data-size="48"
+     data-src="assets/img/demo/photo-01.jpg" data-alt="岛民"></div>
+```
+
+```javascript
+var avatar = new AnimalIsland.Avatar('#my-avatar', {
+  src: 'assets/img/demo/photo-01.jpg',
+  alt: '岛民',
+  shape: 'circle',        // circle | square
+  size: 'middle',         // small(32) | middle(40) | large(48) | 数字（px）
+  icon: null,             // 传 HTML 字符串则显示图标头像
+  text: '阿獭',
+  onError: function () { return false; }  // 返回 false 阻止回退占位
+});
+```
+
+图片加载失败时按 `icon` → `text` → 默认用户剪影的顺序回退。
+
+#### 头像组（AvatarGroup）
+
+```javascript
+var group = new AnimalIsland.AvatarGroup('#my-avatar-group', {
+  items: [
+    { src: 'assets/img/demo/photo-02.jpg', alt: '岛民 A' },
+    { text: '阿獭' },
+    { src: 'assets/img/demo/photo-03.jpg', alt: '岛民 B' }
+  ],
+  maxCount: 3,            // 超出数量的成员折叠为 +N
+  gap: 8,                 // 重叠间距
+  size: 'middle',
+  shape: 'circle'
+});
+```
+
+#### 实例方法
+
+```javascript
+avatar.update({ src: 'new.jpg' });   // 更新配置并重绘
+avatar.destroy();                    // 销毁
+group.destroy();                     // 销毁头像组
+```
+
+---
+
+### 5.32 Badge 徽标数
+
+需要 JS 初始化，支持自动初始化。
+
+```html
+<!-- 独立角标 -->
+<span data-ai="badge" data-count="5"></span>
+
+<!-- 小红点 -->
+<span data-ai="badge" data-dot="true"></span>
+```
+
+```javascript
+var badge = new AnimalIsland.Badge('#my-badge', {
+  count: 5,               // 数字或 HTML 字符串；不传则整体隐藏
+  overflowCount: 99,      // 封顶值，100 → "99+"
+  showZero: false,        // 0 是否显示
+  dot: false,             // 只显示小红点
+  size: 'medium',         // small | medium | large
+  color: 'app-red',       // 12 种配色，见 Tag 章节
+  title: '5 条未读'        // 原生 tooltip，默认用真实数值
+});
+```
+
+元素内部有内容时角标相对该内容定位；元素为空时按独立角标渲染。
+
+```javascript
+badge.update({ count: 12 });   // 更新
+badge.destroy();               // 销毁
+```
+
+---
+
+### 5.33 NoData 空状态
+
+需要 JS 初始化，支持自动初始化。
+
+```html
+<div data-ai="no-data" data-variant="search"
+     data-description="换个关键词再试试"></div>
+```
+
+```javascript
+var noData = new AnimalIsland.NoData('#my-nodata', {
+  variant: 'default',      // default | search | simple
+  size: 'medium',          // small | medium | large
+  title: '暂无数据',        // 传 null 隐藏标题
+  description: '先去岛上逛逛吧',
+  icon: undefined,         // undefined 用内置插画；null 隐藏；字符串则自定义
+  bordered: false,         // 虚线奶油底
+  extra: '<button class="ai-btn ai-btn--sm ai-btn--primary">刷新</button>'
+});
+```
+
+`extra` 也可以是容器内已有的 HTML（`children`）。
+
+```javascript
+noData.update({ description: '没有匹配的岛民' });
+noData.destroy();
+```
+
+---
+
+### 5.34 Rate 评分
+
+需要 JS 初始化，支持自动初始化。
+
+```html
+<div data-ai="rate" data-default-value="3"></div>
+```
+
+```javascript
+var rate = new AnimalIsland.Rate('#my-rate', {
+  value: 3,               // 受控值（传了即为受控）
+  defaultValue: 0,        // 非受控初始值
+  count: 5,               // 星星数量
+  size: 'middle',         // small | middle | large
+  readonly: false,
+  allowClear: true,       // 再次点击同一颗星可清空
+  onChange: function (value) { console.log(value); }
+});
+```
+
+支持键盘操作：方向键增减、Home / End 跳到首尾。
+
+```javascript
+rate.setValue(4);       // 设置评分（切换为受控）
+rate.update({ count: 10 });
+rate.destroy();
+```
+
+---
+
+### 5.35 Pagination 分页
+
+需要 JS 初始化，支持自动初始化。
+
+```html
+<div data-ai="pagination" data-total="120" data-default-current="1"
+     data-default-page-size="10" data-show-size-changer="true"
+     data-show-quick-jumper="true" data-show-total="true"></div>
+```
+
+```javascript
+var pg = new AnimalIsland.Pagination('#my-pagination', {
+  total: 120,
+  current: undefined,        // 传了即为受控
+  defaultCurrent: 1,
+  pageSize: undefined,       // 传了即为受控
+  defaultPageSize: 10,
+  pageSizeOptions: [10, 20, 50],
+  showSizeChanger: false,
+  showQuickJumper: false,
+  showTotal: false,
+  disabled: false,
+  onChange: function (page, pageSize) {},
+  onShowSizeChange: function (page, pageSize) {}
+});
+```
+
+```javascript
+pg.update({ total: 200, defaultCurrent: 1 });
+pg.destroy();
+```
+
+---
+
+### 5.36 Image 图片
+
+需要 JS 初始化，支持自动初始化。
+
+```html
+<div data-ai="image" data-src="assets/img/demo/photo-01.jpg"
+     data-alt="海岛风光" data-width="240" data-height="160"></div>
+```
+
+```javascript
+var image = new AnimalIsland.Image('#my-image', {
+  src: 'assets/img/demo/photo-01.jpg',
+  alt: '海岛风光',
+  width: 240,             // 数字（px）或 CSS 长度字符串
+  height: 160,
+  variant: 'default',     // default | stamp（邮票齿孔 + 年份）
+  stampYear: '2026',
+  color: 'default',       // 占位底色，13 种配色
+  lazy: false,
+  preview: true           // 点击打开内置大图预览（Esc / 点击遮罩关闭）
+});
+```
+
+```javascript
+image.update({ src: 'new.jpg' });
+image.destroy();
+```
+
+---
+
+### 5.37 Carousel 轮播图
+
+需要 JS 初始化，支持自动初始化。
+
+```html
+<!-- data 属性模式：items 为 JSON 数组 -->
+<div data-ai="carousel" data-autoplay="true" data-interval="3500"
+     data-items='[{"src":"a.jpg","title":"海滩","desc":"清晨的海风"}]'></div>
+```
+
+```javascript
+// JS 模式：items 数组，或容器内已有子元素自动折叠为轮播页
+var carousel = new AnimalIsland.Carousel('#my-carousel', {
+  items: [
+    { src: 'assets/img/demo/photo-01.jpg', title: '海滩', desc: '清晨的海风' },
+    { src: 'assets/img/demo/photo-02.jpg', title: '山丘', desc: '午后的草地' }
+  ],
+  activeIndex: undefined,      // 传了即为受控
+  defaultActiveIndex: 0,
+  autoplay: false,
+  interval: 4000,
+  loop: true,
+  showArrows: true,
+  showDots: true,
+  pauseOnHover: true,
+  onChange: function (index) {}
+});
+```
+
+```javascript
+carousel.goTo(2);
+carousel.next();
+carousel.prev();
+carousel.update({ interval: 6000 });
+carousel.destroy();
+```
+
+---
+
+### 5.38 Countdown 倒计时
+
+需要 JS 初始化，支持自动初始化。
+
+```html
+<!-- data-value 支持绝对毫秒时间戳或相对写法 now+15000 -->
+<div data-ai="countdown" data-value="now+60000"
+     data-format="HH:mm:ss" data-prefix="距结束"></div>
+```
+
+```javascript
+var countdown = new AnimalIsland.Countdown('#my-countdown', {
+  value: Date.now() + 60 * 1000,   // 目标毫秒时间戳
+  format: 'DD:HH:mm:ss',           // 支持 DD / HH / mm / ss 组合
+  prefix: '距结束',
+  size: 'middle',                  // small | middle | large
+  variant: 'default',
+  bordered: true,
+  reminder: true,                  // 进入提醒区间时变色
+  shake: true,                     // 秒数变化抖动
+  endingAnimation: true,           // 最后阶段回弹
+  finishAnimation: true,           // 归零动效
+  onFinish: function () {}
+});
+```
+
+`format` 省略的字段不会渲染对应数字块。
+
+```javascript
+countdown.update({ value: Date.now() + 5 * 60 * 1000 });
+countdown.destroy();
+```
+
+---
+
+### 5.39 CountUp 数字滚动
+
+需要 JS 初始化，支持自动初始化。
+
+```html
+<div data-ai="countup" data-start="0" data-end="12800"
+     data-duration="1600" data-prefix="铃钱"></div>
+```
+
+```javascript
+var countUp = new AnimalIsland.CountUp('#my-countup', {
+  start: 0,
+  end: 12800,
+  duration: 1600,               // 毫秒
+  isCounting: true,             // 挂载即开始
+  decimalPlaces: 0,
+  decimalSeparator: '.',
+  thousandsSeparator: ',',
+  easing: 'easeOutCubic',       // linear / easeInCubic / easeOutCubic / easeInOutCubic / easeOutExpo
+  prefix: '铃钱',
+  suffix: '',
+  size: 'middle',               // small | middle | large
+  variant: 'default',           // default | island
+  bordered: false,
+  celebrate: true               // 结束时弹跳 + 光环 + 星芒
+});
+```
+
+```javascript
+countUp.start();
+countUp.pause();
+countUp.reset();               // 回到起点并重新挂起
+countUp.update({ end: 20000 });
+countUp.destroy();
+```
+
+---
+
+### 5.40 Background 装饰背景
+
+纯 CSS 组件，自动初始化只负责根据 `data-type` 追加 class。
+
+```html
+<!-- 波点背景，内容渲染在图案之上 -->
+<div data-ai="background" data-type="dots-teal"
+     style="min-height:200px;padding:24px">
+  <div class="ai-card">内容在背景之上</div>
+</div>
+```
+
+等价的手写 class：
+
+```html
+<div class="ai-background ai-bg-dots-teal">...</div>
+```
+
+可选 `data-type`：`default`、`grid`、`sprinkles`、`sweet-corner`、`coffee-break`、
+`dots-dark-green`、`dots-pink`、`dots-purple`、`dots-blue`、`dots-yellow`、`dots-orange`、
+`dots-teal`、`dots-green`、`dots-red`、`dots-lime-green`、`dots-yellow-green`、
+`dots-brown`、`dots-warm-peach-pink`、`dots-gray`。
+
+全部图案由 CSS 渐变生成（`sweet-corner` / `coffee-break` 使用 SVG 资源），零图片依赖。
+
+---
+
+### 5.41 Upload 上传
+
+需要 JS 初始化，支持自动初始化。
+
+```html
+<div data-ai="upload" data-list-type="text" data-drag="true"
+     data-multiple="true" data-max-count="5"
+     data-accept="image/*" data-tip="单个文件不超过 2MB"></div>
+```
+
+```javascript
+var upload = new AnimalIsland.Upload('#my-upload', {
+  listType: 'text',            // text | picture-card
+  accept: 'image/*',
+  multiple: false,
+  maxCount: undefined,
+  disabled: false,
+  directory: false,
+  drag: false,                 // 拖拽上传区
+  tip: '支持 jpg / png',
+  showUploadList: true,
+  progress: true,              // 内置模拟进度
+  defaultFileList: [],
+  beforeUpload: function (file, fileList) { return true; },  // 返回 false 拦截
+  customRequest: function (options) {
+    // options: { file, onProgress, onSuccess, onError }
+  },
+  onChange: function (fileList) {}
+});
+```
+
+不传 `customRequest` 时，可通过 `action`、`method`、`name`、`data`、`withCredentials`
+让组件用内置 XHR 上传；都不传则只做本地模拟。
+
+```javascript
+upload.uploadFiles(fileList);   // 手动提交文件
+upload.closePreview();          // 关闭 picture-card 预览
+upload.update({ maxCount: 3 });
+upload.destroy();
+```
+
+---
+
+### 5.42 DatePicker 日期选择
+
+需要 JS 初始化，支持自动初始化。
+
+```html
+<div data-ai="datepicker" data-value="2026-08-10"
+     data-picker="date" data-allow-clear="true"></div>
+```
+
+```javascript
+var datePicker = new AnimalIsland.DatePicker('#my-datepicker', {
+  value: '2026-08-10',        // 受控；range 模式下为 ['起', '止']
+  defaultValue: null,
+  range: false,               // 范围选择
+  picker: 'date',             // date | month | year
+  placeholder: '请选择日期',
+  format: 'YYYY-MM-DD',
+  disabled: false,
+  allowClear: false,
+  size: 'middle',             // small | middle | large
+  status: undefined,          // error | warning
+  showToday: true,
+  disabledDate: function (date) { return false; },
+  onChange: function (value) {}
+});
+```
+
+```javascript
+datePicker.update({ value: '2026-09-01' });
+datePicker.destroy();
+```
+
+---
+
+### 5.43 TimePicker 时间选择
+
+需要 JS 初始化，支持自动初始化。
+
+```html
+<div data-ai="timepicker" data-default-value="09:30:00"
+     data-format="HH:mm" data-minute-step="15"></div>
+```
+
+```javascript
+var timePicker = new AnimalIsland.TimePicker('#my-timepicker', {
+  value: '14:30:00',          // 受控；清空回传 null
+  defaultValue: '09:30:00',
+  format: 'HH:mm:ss',         // 不含秒时面板只显示时 / 分两列
+  placeholder: '请选择时间',
+  hourStep: 1,
+  minuteStep: 1,
+  secondStep: 1,
+  disabled: false,
+  allowClear: false,
+  size: 'middle',
+  status: undefined,          // error | warning
+  onChange: function (value) {}
+});
+```
+
+```javascript
+timePicker.update({ value: '08:00:00' });
+timePicker.destroy();
+```
+
+---
+
+### 5.44 Calendar 日历
+
+需要 JS 初始化，支持自动初始化。
+
+```html
+<div data-ai="calendar" data-default-value="2026-08-10"
+     data-events='[{"title":"丰收祭","start":"2026-08-12","end":"2026-08-18","color":"amber"}]'></div>
+```
+
+```javascript
+var calendar = new AnimalIsland.Calendar('#my-calendar', {
+  value: undefined,               // 受控选中日期 'YYYY-MM-DD'
+  defaultValue: '2026-08-10',
+  panelValue: undefined,          // 受控面板月份 'YYYY-MM'
+  defaultPanelValue: undefined,   // 默认显示选中日期所在月
+  showEventTime: true,
+  draggableEvents: false,         // 拖拽跨日创建事项
+  width: undefined,               // 数字 px 或 CSS 长度；不传按容器等比缩放
+  events: [
+    { title: '每日签到', start: '2026-08-10 09:30', showTime: true },
+    { title: '海岛丰收祭', start: '2026-08-12', end: '2026-08-18', color: 'amber' }
+  ],
+  onChange: function (date) {},
+  onPanelChange: function (month) {},
+  onEventCreate: function (start, end) {}
+});
+```
+
+事项的 `color` 支持 `teal` / `amber` / `coral` / `green` / `purple` 五种。
+同日多条自动折叠为 `+N`，跨天事项按周切段显示。
+
+```javascript
+calendar.update({ events: nextEvents });
+calendar.destroy();
+```
+
+---
+
+### 5.45 Chart 图表
+
+需要 JS 初始化，支持自动初始化；纯 SVG 绘制，无第三方依赖。
+
+支持的 19 种 `type`：`column`（柱状）、`bar`（条状）、`line`（折线）、`area`（面积）、
+`mount`（山峰）、`mix`（混合）、`pie`（饼）、`ring`（环形）、`rose`（玫瑰）、
+`radar`（雷达）、`scatter`（散点）、`bubble`（气泡）、`arcbar`（圆弧进度）、
+`gauge`（仪表盘）、`funnel`（漏斗）、`word`（词云）、`candle`（K 线）、
+`time`（时序）、`map`（地图统计）。
+
+```html
+<div data-ai="chart" data-options='{"type":"column","categories":["春","夏","秋","冬"],"series":[{"name":"到访","data":[32,58,41,76]}]}'></div>
+```
+
+```javascript
+var chart = new AnimalIsland.Chart(document.getElementById('chart'), {
+  type: 'column',
+  title: '季度到访',
+  description: '按季节统计的到访人数',
+  height: 300,
+  legend: true,
+  categories: ['春', '夏', '秋', '冬'],
+  series: [
+    { name: '到访', data: [32, 58, 41, 76] }
+  ],
+  // 数值轴范围（不传按数据自动计算）
+  min: undefined,
+  max: undefined,
+  showLabels: false,
+  valueFormatter: function (value) { return value + ' 人'; },
+  // 饼 / 环形 / 玫瑰 / 漏斗 / 地图：data 用 { name, value }
+  // 散点 / 气泡：data 用 { name, x, y, size }
+  // K 线：data 用 { name, open, close, high, low }
+  // 地图统计：额外传 regions: [{ name, polygons: [[[x, y], ...]] }]
+  // 时序：data 用 { name, time, value }
+  onDataClick: function (item) {}
+});
+```
+
+交互：悬浮对比同分类数据、点击锁定读数、按 Esc 解除、点击图例筛选系列。
+
+```javascript
+chart.setProps({ series: nextSeries });   // 更新配置并重绘
+chart.setLoading(true);                   // 加载遮罩
+chart.destroy();
+```
+
+---
+
 ## 6. 自动初始化
 
 页面加载后，`animal-island.js` 会自动扫描并初始化以下元素：
@@ -1294,8 +2489,33 @@ tw.destroy();
 | `.ai-code-block` | `AI.CodeBlock` | 代码块高亮 |
 | `[data-ai="loading"]` | `AI.Loading` | 加载动画 |
 | `[data-ai="table"]` | `AI.Table` | 表格（需配合 `data-columns` 和 `data-source`） |
+| `[data-ai="tag"]` | `AI.Tag` | 标签（关闭/点击交互） |
+| `[data-ai="skeleton"]` | `AI.Skeleton` | 骨架屏 |
+| `[data-ai="progress"]` | `AI.Progress` | 进度条 |
+| `[data-ai="wallet"]` | `AI.Wallet` | 钱包 |
+| `[data-ai="radio"]` | `AI.Radio` | 单选框（需配合 `data-options`） |
+| `[data-ai="tooltip"]` | `AI.Tooltip` | 工具提示 |
+| `[data-ai="backtop"]` | `AI.BackTop` | 返回顶部 |
+| `[data-ai="drawer"]` | `AI.Drawer` | 抽屉（inline 模式） |
+| `[data-ai="form"]` | `AI.Form` | 表单 |
+| `[data-ai="avatar"]` | `AI.Avatar` | 头像 |
+| `[data-ai="avatar-group"]` | `AI.AvatarGroup` | 头像组（`items` 需 JS 传入） |
+| `[data-ai="badge"]` | `AI.Badge` | 徽标数 |
+| `[data-ai="no-data"]` | `AI.NoData` | 空状态 |
+| `[data-ai="rate"]` | `AI.Rate` | 评分 |
+| `[data-ai="pagination"]` | `AI.Pagination` | 分页 |
+| `[data-ai="image"]` | `AI.Image` | 图片 |
+| `[data-ai="carousel"]` | `AI.Carousel` | 轮播图（`data-items` 传 JSON） |
+| `[data-ai="countdown"]` | `AI.Countdown` | 倒计时（`data-value` 支持 `now+毫秒`） |
+| `[data-ai="countup"]` | `AI.CountUp` | 数字滚动 |
+| `[data-ai="background"]` | 装饰背景 | 仅按 `data-type` 追加 class |
+| `[data-ai="upload"]` | `AI.Upload` | 上传 |
+| `[data-ai="datepicker"]` | `AI.DatePicker` | 日期选择 |
+| `[data-ai="timepicker"]` | `AI.TimePicker` | 时间选择 |
+| `[data-ai="calendar"]` | `AI.Calendar` | 日历（`data-events` 传 JSON） |
+| `[data-ai="chart"]` | `AI.Chart` | 图表（`data-options` 传 JSON） |
 
-> **注意**：Modal、Typewriter 和 Cursor 不支持自动初始化。Modal 和 Typewriter 必须手动调用 JS API，Cursor 是纯 CSS 组件。
+> **注意**：Modal、Typewriter、Title 和 Notification 不支持自动初始化。Modal 和 Typewriter 必须手动调用 JS API，Title 通过 JS 工厂方法创建 DOM，Notification 通过命令式 API 调用。Cursor 是纯 CSS 组件。另外，需要传函数的值（如 `disabledDate`、`beforeUpload`、`customRequest`、`onChange`）无法写在 data 属性里，请使用手动实例化。
 
 ### 手动触发初始化
 
@@ -1329,6 +2549,33 @@ new AnimalIsland.Typewriter(el, text, speedOrOptions)
 new AnimalIsland.Loading(el, options)
 new AnimalIsland.Phone(el)
 new AnimalIsland.CodeBlock(el)
+new AnimalIsland.Tag(el, options)          // 标签
+new AnimalIsland.Title(options)           // 标题（工厂方法，返回 DOM）
+new AnimalIsland.Skeleton(el, options)    // 骨架屏
+new AnimalIsland.Progress(el, options)    // 进度条
+new AnimalIsland.Radio(el, options)       // 单选框
+new AnimalIsland.Wallet(el, options)      // 钱包
+new AnimalIsland.Tooltip(el, options)     // 工具提示
+new AnimalIsland.BackTop(el, options)     // 返回顶部（el 可传 null）
+new AnimalIsland.Drawer(el, options)      // 抽屉（el 可传 null）
+new AnimalIsland.Form(el, options)        // 表单
+new AnimalIsland.Avatar(el, options)      // 头像
+new AnimalIsland.AvatarGroup(el, options) // 头像组
+new AnimalIsland.Badge(el, options)       // 徽标数
+new AnimalIsland.NoData(el, options)      // 空状态
+new AnimalIsland.Rate(el, options)        // 评分
+new AnimalIsland.Pagination(el, options)  // 分页
+new AnimalIsland.Image(el, options)       // 图片
+new AnimalIsland.Carousel(el, options)    // 轮播图
+new AnimalIsland.Countdown(el, options)   // 倒计时
+new AnimalIsland.CountUp(el, options)     // 数字滚动
+new AnimalIsland.Upload(el, options)      // 上传
+new AnimalIsland.DatePicker(el, options)  // 日期选择
+new AnimalIsland.TimePicker(el, options)  // 时间选择
+new AnimalIsland.Calendar(el, options)    // 日历
+new AnimalIsland.Chart(el, options)       // 图表
+AnimalIsland.Notification.open(config)    // 通知（命令式，无需 new）
+AnimalIsland.Notification.success/info/warning/error(config)
 ```
 
 ### 实例方法
@@ -1357,6 +2604,92 @@ phone.destroy()                         // 销毁手机（清除定时器）
 
 // Checkbox
 checkbox.getValues()                    // 获取当前选中值数组
+
+// Skeleton
+skeleton.setActive(true/false)          // 开启/关闭 shimmer 动画
+
+// Progress
+progress.setPercent(n)                  // 更新百分比
+progress.getPercent()                   // 获取当前百分比
+
+// Radio
+radio.getValue()                        // 获取当前选中值
+radio.setValue(v)                       // 设置选中值
+radio.disable() / radio.enable()        // 禁用/启用
+
+// Wallet
+wallet.setValue(v)                      // 设置金额
+wallet.getValue()                       // 获取金额
+
+// Title（工厂方法返回的 DOM 元素）
+titleEl.setText(text)                   // 更新文本
+
+// BackTop
+backtop.destroy()                       // 销毁（移除事件监听和 DOM）
+
+// Drawer
+drawer.open()                           // 打开抽屉
+drawer.close()                          // 关闭抽屉
+
+// Form
+form.submit()                           // 触发提交（先校验）
+form.validateFields([names])            // 校验字段，返回 Promise
+form.resetFields([names])               // 重置字段
+form.getFieldValue(name)                // 取字段值
+form.setFieldValue(name, value)         // 设字段值
+form.getFieldsValue()                   // 取全部字段值
+form.setFieldsValue(obj)                // 批量设值
+form.getFieldError(name)                // 取字段错误
+form.isFieldTouched(name)               // 字段是否触碰过
+form.scrollToField(name)                // 滚动到字段
+
+// Avatar
+avatar.update(next)                     // 更新配置并重绘
+avatar.destroy()
+avatarGroup.destroy()
+
+// Badge / NoData
+badge.update(next) / badge.destroy()
+noData.update(next) / noData.destroy()
+
+// Rate
+rate.setValue(v)                        // 设置评分（切换为受控）
+rate.update(next) / rate.destroy()
+
+// Pagination
+pg.update(next) / pg.destroy()
+
+// Image
+image.update(next) / image.destroy()
+
+// Carousel
+carousel.goTo(index)                    // 跳到指定页
+carousel.next() / carousel.prev()       // 上一页/下一页
+carousel.update(next) / carousel.destroy()
+
+// Countdown
+countdown.update(next) / countdown.destroy()
+
+// CountUp
+countUp.start()                         // 开始滚动
+countUp.pause()                         // 暂停
+countUp.reset()                         // 回到起点
+countUp.update(next) / countUp.destroy()
+
+// Upload
+upload.uploadFiles(files)               // 手动提交文件
+upload.closePreview()                   // 关闭图片预览
+upload.update(next) / upload.destroy()
+
+// DatePicker / TimePicker / Calendar
+datePicker.update(next) / datePicker.destroy()
+timePicker.update(next) / timePicker.destroy()
+calendar.update(next) / calendar.destroy()
+
+// Chart
+chart.setProps(options)                 // 更新配置并重绘
+chart.setLoading(true/false)            // 加载遮罩
+chart.destroy()
 ```
 
 ### 静态方法
@@ -1364,6 +2697,12 @@ checkbox.getValues()                    // 获取当前选中值数组
 ```javascript
 AnimalIsland.CodeBlock.highlight(code)  // 高亮代码字符串，返回 HTML
 AnimalIsland.autoInit()                 // 手动触发自动初始化
+
+// Notification（命令式 API）
+AnimalIsland.Notification.open(config)              // 打开通知，返回 key
+AnimalIsland.Notification.success/info/warning/error(config)  // 快捷方法
+AnimalIsland.Notification.close(key)                // 关闭单条通知
+AnimalIsland.Notification.destroy()                 // 关闭全部通知
 ```
 
 ### 参数说明
